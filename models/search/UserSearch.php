@@ -2,6 +2,7 @@
 
 namespace app\models\search;
 
+use app\models\Profile;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -12,14 +13,16 @@ use app\models\User;
  */
 class UserSearch extends User
 {
+    public $company;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'status_id', 'role_id', 'created_at', 'updated_at'], 'integer'],
-            [['email', 'password_hash', 'auth_key'], 'safe'],
+            [['status_id', 'role_id', 'created_at'], 'integer'],
+            [['email', 'company'], 'safe'],
         ];
     }
 
@@ -42,26 +45,30 @@ class UserSearch extends User
     public function search($params)
     {
         $query = User::find();
+        $query->joinWith(['profile']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['company'] = [
+            'asc'  => [Profile::tableName() . '.company' => SORT_ASC],
+            'desc' => [Profile::tableName() . '.company' => SORT_DESC],
+        ];
 
         if ($this->load($params) && !$this->validate()) {
             return $dataProvider;
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'status_id' => $this->status_id,
-            'role_id' => $this->role_id,
+            'status_id'  => $this->status_id,
+            'role_id'    => $this->role_id,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key]);
+        $query
+            ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', Profile::tableName() . '.company', $this->company]);
 
         return $dataProvider;
     }

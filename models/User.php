@@ -45,6 +45,9 @@ class User extends ActiveRecord implements IdentityInterface
     /**  @var string Читабельный статус пользователя. */
     private $_status;
 
+    /**  @var string Читабельная роль пользователя. */
+    private $_roles;
+
     // *******************************************************************
     // * VALIDATE
     // *******************************************************************/
@@ -238,14 +241,18 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getRole()
     {
-        $return = '';
-        $roles = Yii::$app->authManager->getRolesByUser( $this->getId() );
+//        $return = '';
+//        $roles = Yii::$app->authManager->getRolesByUser( $this->getId() );
+//
+//        foreach( $roles as $role) {
+//            $return .= $role->name . " \n";
+//        }
+//
+//        return $return;
 
-        foreach( $roles as $role) {
-            $return .= $role->name . " \n";
-        }
-
-        return $return;
+        return ($this->_roles === null)
+            ? $this->_roles = self::getRoleArray()[$this->role_id]
+            : $this->_roles;
     }
 
     /**

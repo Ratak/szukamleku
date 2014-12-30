@@ -79,13 +79,17 @@ class UsersController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $post = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $model   = $this->findModel($id);
+        $profile = $model->profile;
+
+        if ($model->load($post) && $profile->load($post) && $model->save() && $profile->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model'   => $model,
+                'profile' => $model->profile,
             ]);
         }
     }
