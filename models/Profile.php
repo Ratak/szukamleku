@@ -35,8 +35,14 @@ class Profile extends ActiveRecord
     {
         /* TODO */
         return [
-            [['first_name', 'last_name', 'phone'], 'required'],
-            [['first_name', 'last_name', 'phone'], 'string', 'max' => 50]
+            ['company', 'string'],
+            ['first_name', 'string'],
+            ['last_name', 'string'],
+            ['phone', 'string'],
+            ['fax', 'string'],
+            ['legal_address', 'string'],
+            ['postal_address', 'string'],
+            ['krs', 'string'],
         ];
     }
 
@@ -46,15 +52,15 @@ class Profile extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id'        => Yii::t('app', 'User ID'),
-            'company'        => Yii::t('app', 'Company'),
-            'first_name'     => Yii::t('app', 'First Name'),
-            'last_name'      => Yii::t('app', 'Last Name'),
-            'phone'          => Yii::t('app', 'Phone'),
-            'fax'            => Yii::t('app', 'Fax'),
-            'legal_address'  => Yii::t('app', 'Legal Address'),
-            'postal_address' => Yii::t('app', 'Postal Address'),
-            'krs'            => Yii::t('app', 'Postal Address'),
+            'user_id'        => Yii::t('app', 'USER_ID'),
+            'company'        => Yii::t('app', 'COMPANY'),
+            'first_name'     => Yii::t('app', 'FIRST_NAME'),
+            'last_name'      => Yii::t('app', 'LAST_NAME'),
+            'phone'          => Yii::t('app', 'PHONE'),
+            'fax'            => Yii::t('app', 'FAX'),
+            'legal_address'  => Yii::t('app', 'LEGAL_ADDRESS'),
+            'postal_address' => Yii::t('app', 'POSTAL_ADDRESS'),
+            'krs'            => Yii::t('app', 'KRS'),
         ];
     }
 

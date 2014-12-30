@@ -89,10 +89,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function scenarios()
     {
         return [
-            'signup'  => ['email', 'password', 'language'],
             'recover' => ['password'],
-            'create'  => ['email', 'password', 'language'],
-            'update'  => ['email', 'password', 'language'],
+            'signup'  => ['status_id', 'role_id', 'language', 'email', 'password', 'language'],
+            'create'  => ['status_id', 'role_id', 'language', 'email', 'password', 'language'],
+            'update'  => ['status_id', 'role_id', 'language' ,'email', 'password', 'language'],
         ];
     }
 
@@ -142,11 +142,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function afterSave($insert, $changedAttributes)
     {
         if ($insert) {
-            $profile = new Profile([
-                'user_id' => $this->id,
-            ]);
-
-            $this->populateRelation('profile', $profile);
+//            $profile = new Profile([
+//                'user_id' => $this->id,
+//            ]);
+//
+//            $this->populateRelation('profile', $profile);
         }
 
         parent::afterSave($insert, $changedAttributes);

@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ['class' => 'success'];
                 case User::STATUS_BANNED :
                     return ['class' => 'danger'];
-                default:
-                    return $model->id === Yii::$app->user->identity->id ? ['class' => 'info'] : '';
+                case User::STATUS_INACTIVE :
+                    return ['class' => 'warning'];
             }
         },
         'columns' => [

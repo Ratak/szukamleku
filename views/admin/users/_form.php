@@ -24,6 +24,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->input('email', ['maxlength' => 100]) ?>
 
+    <?= $form->field($model, 'password')->passwordInput() ?>
+
     <?= $form->field($profile, 'company')->textInput() ?>
     <?= $form->field($profile, 'first_name')->textInput() ?>
     <?= $form->field($profile, 'last_name')->textInput() ?>

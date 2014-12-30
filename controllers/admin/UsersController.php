@@ -2,6 +2,7 @@
 
 namespace app\controllers\admin;
 
+use app\models\Profile;
 use Yii;
 use app\models\User;
 use app\models\search\UserSearch;
@@ -60,15 +61,26 @@ class UsersController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        $post = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        $model = new User(['scenario' => 'create']);
+        $profile = new Profile();
+
+        if (($model->load($post) && $profile->load($post)) && ($model->validate() && $profile->validate())) {
+            $model->populateRelation('profile', $profile);
+
+            if ($model->save(false)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else {
+                Yii::error('An error occurred while registering user account');
+                return false;
+            }
         }
+        return $this->render('create', [
+            'model'   => $model,
+            'profile' => $profile,
+        ]);
     }
 
     /**
@@ -89,7 +101,7 @@ class UsersController extends Controller
         } else {
             return $this->render('update', [
                 'model'   => $model,
-                'profile' => $model->profile,
+                'profile' => $profile,
             ]);
         }
     }
