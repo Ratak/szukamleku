@@ -1,14 +1,12 @@
 <?php
 
-use kartik\grid\ActionColumn;
-use kartik\grid\GridView;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\PharmacieSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Pharmacies');
+$this->title = Yii::t('pharmacie', 'PHARMACIES');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="pharmacie-index">
@@ -18,31 +16,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'Pharmacie',
-]), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('pharmacie', 'CREATE_PHARMACIE'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'export' => false,
+    <?= $this->render('_list', [
+        'searchModel'  => $searchModel,
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            'user.profile.company',
-            'name',
-//            'latitude',
-//            'longitude',
-            // 'phone',
-            // 'fax',
-            // 'url:url',
-            // 'email:email',
-//             'region_id',
-//             'city_id',
-//             'district_id',
-            // 'address',
-
-            ['class' => ActionColumn::className()],
-        ],
-    ]); ?>
+    ]) ?>
 
 </div>

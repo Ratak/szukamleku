@@ -41,7 +41,7 @@ class PharmacieSearch extends Pharmacie
      */
     public function search($params)
     {
-        $query = Pharmacie::find();
+        $query = Pharmacie::find()->with('user');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -51,17 +51,16 @@ class PharmacieSearch extends Pharmacie
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'id'          => $this->id,
-            'user_id'     => $this->user_id,
-            'latitude'    => $this->latitude,
-            'longitude'   => $this->longitude,
-            'region_id'   => $this->region_id,
-            'city_id'     => $this->city_id,
-            'district_id' => $this->district_id,
-        ]);
-
         $query
+            ->andFilterWhere([
+                'id'          => $this->id,
+                'user_id'     => $this->user_id,
+                'latitude'    => $this->latitude,
+                'longitude'   => $this->longitude,
+                'region_id'   => $this->region_id,
+                'city_id'     => $this->city_id,
+                'district_id' => $this->district_id,
+            ])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'fax', $this->fax])
