@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Regions');
+$this->title = Yii::t('map', 'REGIONS');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="region-index">

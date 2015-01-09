@@ -1,10 +1,6 @@
 <?php
 
-use app\models\City;
-use kartik\grid\ActionColumn;
-use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\CitySearch */
@@ -12,11 +8,11 @@ use yii\helpers\Url;
 /* @var $region app\models\Region|null */
 
 if($region) {
-    $this->title = Yii::t('app', 'City in the {region} region', ['region' => $region->name]);
-    $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cities'), 'url' => ['index']];
+    $this->title = Yii::t('map', 'CITY_IN {region}', ['region' => $region->name]);
+    $this->params['breadcrumbs'][] = ['label' => Yii::t('map', 'CITIES'), 'url' => ['index']];
 }
 else {
-    $this->title = Yii::t('app', 'Cities');
+    $this->title = Yii::t('map', 'CITIES');
 }
 
 $this->params['breadcrumbs'][] = $this->title;

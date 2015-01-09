@@ -8,7 +8,7 @@ use yii\helpers\Html;
 /* @var $searchModel app\models\search\DistrictSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Districts');
+$this->title = Yii::t('map', 'DISTRICTS');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="district-index">

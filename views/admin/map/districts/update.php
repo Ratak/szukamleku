@@ -5,12 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\District */
 
-$this->title = Yii::t('app', 'Update {modelClass}: ', [
-    'modelClass' => 'District',
-]) . ' ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Districts'), 'url' => ['index']];
+$this->title = Yii::t('map', 'UPDATE_DISTRICT: {name}', ['name' => $model->name]);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('map', 'DISTRICTS'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('map', 'UPDATE');
 ?>
 <div class="district-update">
 

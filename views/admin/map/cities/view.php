@@ -8,19 +8,16 @@ use yii\helpers\Html;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Regions'), 'url' => ['/admin/map/regions']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('map', 'REGIONS'), 'url' => ['/admin/map/regions']];
 $this->params['breadcrumbs'][] = ['label' => $model->region->name, 'url' => ['/admin/map/regions/view', 'id' => 1]];
 $this->params['breadcrumbs'][] = $this->title;
-
-/*$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Cities'),  'url' => ['index']];
-*/
 ?>
 <div class="city-index">
 
-    <h1><?= Html::encode( Yii::t('app', 'Districts in {city}', ['city' => $this->title])) ?></h1>
+    <h1><?= Html::encode( Yii::t('map', 'DISTRICTS_IN {city}', ['city' => $this->title])) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create District'), ['/admin/map/districts/create', 'city' => $model->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('map', 'ADD_DISTRICT'), ['/admin/map/districts/create', 'city' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= $this->render('@app/views/admin/map/districts/_list', [

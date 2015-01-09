@@ -6,10 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\District */
 
-$this->title = Yii::t('app', 'Create {modelClass}', [
-    'modelClass' => 'District',
-]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Districts'), 'url' => ['index']];
+$this->title = Yii::t('map', 'ADD_DISTRICT');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('map', 'DISTRICTS'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="district-create">
