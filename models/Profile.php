@@ -7,7 +7,6 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer $user_id
- * @property string  $company
  * @property string  $first_name
  * @property string  $last_name
  * @property string  $phone
@@ -35,7 +34,6 @@ class Profile extends ActiveRecord
     {
         /* TODO */
         return [
-            ['company', 'string'],
             ['first_name', 'string'],
             ['last_name', 'string'],
             ['phone', 'string'],
@@ -53,7 +51,6 @@ class Profile extends ActiveRecord
     {
         return [
             'user_id'        => Yii::t('app', 'USER_ID'),
-            'company'        => Yii::t('app', 'COMPANY'),
             'first_name'     => Yii::t('app', 'FIRST_NAME'),
             'last_name'      => Yii::t('app', 'LAST_NAME'),
             'phone'          => Yii::t('app', 'PHONE'),
