@@ -47,6 +47,18 @@ class Profile extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public function scenarios()
+    {
+        return [
+            'signup'  => ['first_name', 'last_name', 'phone', 'fax', 'legal_address', 'postal_address', 'krs'],
+            'create'  => ['first_name', 'last_name', 'phone', 'fax', 'legal_address', 'postal_address', 'krs'],
+            'update'  => ['first_name', 'last_name', 'phone' ,'fax', 'legal_address', 'postal_address', 'krs'],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [

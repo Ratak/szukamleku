@@ -146,6 +146,15 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function afterSave($insert, $changedAttributes)
     {
+        parent::afterSave($insert, $changedAttributes);
+
+        $relatedRecords = $this->getRelatedRecords();
+
+        if ($this->isRelationPopulated('profile')) {
+            $this->link('profile', $relatedRecords['profile']);
+        }
+
+
         if ($insert) {
 //            $profile = new Profile([
 //                'user_id' => $this->id,
@@ -170,11 +179,27 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @param Profile $profile
+     */
+    public function setProfile(Profile $profile)
+    {
+        $this->populateRelation('profile', $profile);
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getPharmacies()
     {
         return $this->hasMany(Pharmacie::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * @param Pharmacie[] $pharmacies
+     */
+    public function setPharmacies($pharmacies)
+    {
+        $this->populateRelation('pharmacies', $pharmacies);
     }
 
     // *******************************************************************

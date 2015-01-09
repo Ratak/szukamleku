@@ -129,31 +129,21 @@ class SignupForm extends Model
             return false;
         }
 
-        $user = new User([
-            'scenario' => 'signup',
-            'email'    => $this->email,
-            'password' => $this->password,
-        ]);
-        $profile = new Profile([
-            'company'        => $this->company,
-            'first_name'     => $this->first_name,
-            'last_name'      => $this->last_name,
-            'phone'          => $this->phone,
-            'fax'            => $this->fax,
-            'legal_address'  => $this->legal_address,
-            'postal_address' => $this->postal_address,
-            'krs'            => $this->krs,
-        ]);
+        $attr = $this->getAttributes();
 
-        if ($user->validate() && $profile->validate()) {
-            $user->populateRelation('profile', $profile);
+        $user    = new User(['scenario' => 'signup']);
+        $profile = new Profile(['scenario' => 'signup']);
 
-            if ($user->save(false)) {
-                Yii::$app->session->setFlash('FLAH_SIGNUP_SENT');
+        if(($user->load($attr, false) && $profile->load($attr, false)) && ($user->validate() && $profile->validate())) {
+            $user->setProfile($profile);
+
+            if($user->save(false)) {
+                Yii::$app->session->setFlash( Yii::t('auth', 'FLAH_SIGNUP_SENT') );
                 Yii::info('User has been registered');
                 return true;
             }
             else {
+                Yii::$app->session->setFlash( Yii::t('auth', 'FLAH_SIGNUP_ERROR') );
                 Yii::error('An error occurred while registering user account');
                 return false;
             }

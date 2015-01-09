@@ -63,22 +63,23 @@ class UsersController extends Controller
     {
         $post = Yii::$app->request->post();
 
-        $model = new User(['scenario' => 'create']);
-        $profile = new Profile();
+        $user    = new User(['scenario' => 'create']);
+        $profile = new Profile(['scenario' => 'create']);
 
-        if (($model->load($post) && $profile->load($post)) && ($model->validate() && $profile->validate())) {
-            $model->populateRelation('profile', $profile);
+        if (($user->load($post) && $profile->load($post)) && ($user->validate() && $profile->validate())) {
+            $user->setProfile($profile);
 
-            if ($model->save(false)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if($user->save(false)) {
+                Yii::$app->session->setFlash( Yii::t('user', 'FLAH_USER_CREATE_SUCCESS') );
+                return $this->redirect(['view', 'id' => $user->id]);
             }
             else {
-                Yii::error('An error occurred while registering user account');
-                return false;
+                Yii::$app->session->setFlash( Yii::t('user', 'FLAH_USER_CREATE_ERROR') );
             }
         }
+
         return $this->render('create', [
-            'model'   => $model,
+            'model'   => $user,
             'profile' => $profile,
         ]);
     }
