@@ -7,12 +7,8 @@
 
 namespace app\controllers;
 
-use app\models\City;
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\form\LoginForm;
 use app\models\form\ContactForm;
 
 class SiteController extends Controller
