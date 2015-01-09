@@ -48,14 +48,15 @@ AppAsset::register($this);
 
                     '<li class="divider"></li>',
 
-                    ['label' => 'Drugs', 'url' => ['/admin/drugs']],
-                    ['label' => 'Pharmacies', 'url' => ['/admin/pharmacies']],
-                    ['label' => 'Users', 'url' => ['/admin/users']],
-
-                    ['label' => 'Map', 'items' => [
-                        ['label' => 'Regions', 'url' => ['/admin/map/regions']],
-                        ['label' => 'Cities', 'url' => ['/admin/map/cities']],
-                        ['label' => 'Districts', 'url' => ['/admin/map/districts']],
+                    ['label' => 'Admin', 'items' => [
+                        ['label' => 'Drugs',      'url' => ['/admin/drugs']],
+                        ['label' => 'Pharmacies', 'url' => ['/admin/pharmacies']],
+                        ['label' => 'Users',      'url' => ['/admin/users']],
+                        ['label' => 'Map', 'items' => [
+                            ['label' => 'Regions',   'url' => ['/admin/map/regions']],
+                            ['label' => 'Cities',    'url' => ['/admin/map/cities']],
+                            ['label' => 'Districts', 'url' => ['/admin/map/districts']],
+                        ]],
                     ]],
 
                     '<li class="divider"></li>',
@@ -65,6 +66,8 @@ AppAsset::register($this);
                         ['label' => 'recover', 'url' => ['/auth/recover']],
                         ['label' => 'recover-confirmation', 'url' => ['/auth/recover-confirmation']],
                     ]],
+
+                    '<li class="divider"></li>',
 
                     Yii::$app->user->isGuest ?
                         ['label' => 'Login', 'url' => ['/auth/login']] :
