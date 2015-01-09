@@ -14,10 +14,13 @@ use yii\web\IdentityInterface;
  * @property integer     $role_id
  * @property integer     $language
  * @property string      $email
+ * @property string      $company
  * @property string      $password_hash
  * @property string      $auth_key
  * @property integer     $created_at
  * @property integer     $updated_at
+ *
+ * @property string      $status
  *
  * @property Pharmacie[] $pharmacies
  * @property Profile     $profile
@@ -66,6 +69,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['role_id', 'in',      'range' => array_keys( self::getRoleArray() )],
             ['role_id', 'default', 'value' => self::ROLE_USER],
 
+            ['company', 'string'],
+
             // Язык [[language]]
             ['language', 'exist',   'targetClass' => Language::className(), 'targetAttribute' => 'url'],
             ['language', 'default', 'value' => Language::getDefaultLang()->url],
@@ -90,9 +95,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             'recover' => ['password'],
-            'signup'  => ['status_id', 'role_id', 'language', 'email', 'password', 'language'],
-            'create'  => ['status_id', 'role_id', 'language', 'email', 'password', 'language'],
-            'update'  => ['status_id', 'role_id', 'language' ,'email', 'password', 'language'],
+            'signup'  => ['status_id', 'role_id', 'language', 'email', 'company', 'password', 'language'],
+            'create'  => ['status_id', 'role_id', 'language', 'email', 'company', 'password', 'language'],
+            'update'  => ['status_id', 'role_id', 'language' ,'email', 'company', 'password', 'language'],
         ];
     }
 
@@ -339,6 +344,7 @@ class User extends ActiveRecord implements IdentityInterface
             'role_id'       => Yii::t('user', 'ROLE_ID'),
             'language'      => Yii::t('user', 'LANGUAGE'),
             'email'         => Yii::t('user', 'EMAIL'),
+            'company'       => Yii::t('user', 'COMPANY'),
             'password'      => Yii::t('user', 'PASSWORD'),
             'password_hash' => Yii::t('user', 'PASSWORD_HASH'),
             'auth_key'      => Yii::t('user', 'AUTH_KEY'),

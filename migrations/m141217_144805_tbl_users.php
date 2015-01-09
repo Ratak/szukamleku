@@ -14,6 +14,7 @@ class m141217_144805_tbl_users extends Migration
             'role_id'       => Schema::TYPE_SMALLINT . '(2) DEFAULT ' . User::ROLE_USER,
             'language'      => Schema::TYPE_STRING   . '(2)',
             'email'         => Schema::TYPE_STRING   . '(100)',
+            'company'       => Schema::TYPE_STRING,
             'password_hash' => Schema::TYPE_STRING,
             'auth_key'      => Schema::TYPE_STRING   . '(32)',
             'created_at'    => Schema::TYPE_INTEGER  . '(11) UNSIGNED',

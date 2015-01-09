@@ -93,7 +93,8 @@ class UsersController extends Controller
     {
         $post = Yii::$app->request->post();
 
-        $model   = $this->findModel($id);
+        $model = $this->findModel($id);
+        $model->setScenario('update');
         $profile = $model->profile;
 
         if ($model->load($post) && $profile->load($post) && $model->save() && $profile->save()) {

@@ -32,7 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ['class' => 'danger'];
                 case User::STATUS_INACTIVE :
                     return ['class' => 'warning'];
+                default:
+                    return null;
             }
+
         },
         'columns' => [
             [
@@ -41,7 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'filter'    => true,
                 'attribute' => 'company',
-                'value'     => 'profile.company',
             ],
             [
                 'filter'              => User::getStatusArray(),

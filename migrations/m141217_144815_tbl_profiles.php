@@ -11,7 +11,6 @@ class m141217_144815_tbl_profiles extends Migration
     {
         $this->createTable(Profile::tableName(), [
             'user_id'        => Schema::TYPE_PK,
-            'company'        => Schema::TYPE_STRING,
             'first_name'     => Schema::TYPE_STRING,
             'last_name'      => Schema::TYPE_STRING,
             'phone'          => Schema::TYPE_STRING,

@@ -2,7 +2,6 @@
 
 namespace app\models\search;
 
-use app\models\Profile;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -13,8 +12,6 @@ use app\models\User;
  */
 class UserSearch extends User
 {
-    public $company;
-
     /**
      * @inheritdoc
      */
@@ -50,11 +47,6 @@ class UserSearch extends User
             'query' => $query,
         ]);
 
-        $dataProvider->sort->attributes['company'] = [
-            'asc'  => [Profile::tableName() . '.company' => SORT_ASC],
-            'desc' => [Profile::tableName() . '.company' => SORT_DESC],
-        ];
-
         if ($this->load($params) && !$this->validate()) {
             return $dataProvider;
         }
@@ -66,8 +58,8 @@ class UserSearch extends User
         ]);
 
         $query
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', Profile::tableName() . '.company', $this->company]);
+            ->andFilterWhere(['like', 'email',   $this->email])
+            ->andFilterWhere(['like', 'company', $this->company]);
 
         return $dataProvider;
     }

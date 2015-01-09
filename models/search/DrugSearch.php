@@ -18,8 +18,8 @@ class DrugSearch extends Drug
     public function rules()
     {
         return [
-            [['id', 'status'], 'integer'],
-            [['name', 'name_international', 'name_pharmaceutical', 'chemical_components', 'release_form', 'dosage', 'quantity_in_package', 'manufacturer'], 'safe'],
+            ['status_id', 'integer'],
+            [['name', 'release_form', 'manufacturer'], 'safe'],
         ];
     }
 
@@ -28,7 +28,6 @@ class DrugSearch extends Drug
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
@@ -52,18 +51,15 @@ class DrugSearch extends Drug
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'status' => $this->status,
+            'status_id'    => $this->status_id,
+            'release_form' => $this->release_form,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'name_international', $this->name_international])
-            ->andFilterWhere(['like', 'name_pharmaceutical', $this->name_pharmaceutical])
-            ->andFilterWhere(['like', 'chemical_components', $this->chemical_components])
-            ->andFilterWhere(['like', 'release_form', $this->release_form])
-            ->andFilterWhere(['like', 'dosage', $this->dosage])
-            ->andFilterWhere(['like', 'quantity_in_package', $this->quantity_in_package])
-            ->andFilterWhere(['like', 'manufacturer', $this->manufacturer]);
+        $query
+            ->andFilterWhere(['like', 'manufacturer', $this->manufacturer])
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->orFilterWhere(['like', 'name_international', $this->name])
+            ->orFilterWhere(['like', 'name_pharmaceutical', $this->name]);
 
         return $dataProvider;
     }
