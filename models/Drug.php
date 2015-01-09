@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * @property integer     $id
@@ -15,12 +16,50 @@ use yii\db\ActiveRecord;
  * @property string      $dosage
  * @property string      $quantity_in_package
  * @property string      $manufacturer
- * @property integer     $status
+ * @property integer     $status_id
+ *
+ * @property string      $status
  *
  * @property Pharmacie[] $pharmacies
  */
 class Drug extends ActiveRecord
 {
+    const STATUS_ADMITTED             = 1;
+    const STATUS_ADMITTED_REMOVED     = 2;
+    const STATUS_UNREGISTERED         = 3;
+    const STATUS_UNREGISTERED_REMOVED = 4;
+    const STATUS_EXPIRED              = 5;
+    const STATUS_EXPIRED_REMOVED      = 6;
+
+    const CACHE_KEY_RELEASE_FORM = 'cache_key_release_form';
+    const CACHE_KEY_DOSAGE       = 'cache_key_dosage';
+    const CACHE_KEY_IN_PACKAGE   = 'cache_key_in_package';
+    const CACHE_KEY_MANUFACTURER = 'cache_key_manufacturer';
+
+    /** @var string Читабельный статус */
+    private $_status;
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if(isset($changedAttributes['release_form'])) {
+            Yii::$app->cache->delete(self::CACHE_KEY_RELEASE_FORM);
+        }
+
+        if(isset($changedAttributes['dosage'])) {
+            Yii::$app->cache->delete(self::CACHE_KEY_DOSAGE);
+        }
+
+        if(isset($changedAttributes['quantity_in_package'])) {
+            Yii::$app->cache->delete(self::CACHE_KEY_IN_PACKAGE);
+        }
+
+        if(isset($changedAttributes['manufacturer'])) {
+            Yii::$app->cache->delete(self::CACHE_KEY_MANUFACTURER);
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -35,7 +74,7 @@ class Drug extends ActiveRecord
     public function rules()
     {
         return [
-            [['status'], 'integer'],
+            [['status_id'], 'integer'],
             [['name', 'name_international', 'name_pharmaceutical', 'chemical_components', 'release_form', 'dosage', 'quantity_in_package', 'manufacturer'], 'string', 'max' => 255]
         ];
     }
@@ -47,6 +86,95 @@ class Drug extends ActiveRecord
     {
         return $this->hasMany(Pharmacie::className(), ['id' => 'pharmacie_id'])
             ->viaTable(PharmaciesDrugs::tableName(), ['drug_id' => 'id']);
+    }
+
+    /**
+     * Массив доступных статусов
+     *
+     * @return array
+     */
+    public static function getStatusArray()
+    {
+        return [
+            self::STATUS_ADMITTED             => Yii::t('grug', 'ADMITTED'),
+            self::STATUS_ADMITTED_REMOVED     => Yii::t('grug', 'ADMITTED_REMOVED'),
+            self::STATUS_EXPIRED              => Yii::t('grug', 'TATUS_EXPIRED'),
+            self::STATUS_EXPIRED_REMOVED      => Yii::t('grug', 'EXPIRED_REMOVED'),
+            self::STATUS_UNREGISTERED         => Yii::t('grug', 'UNREGISTERED'),
+            self::STATUS_UNREGISTERED_REMOVED => Yii::t('grug', 'UNREGISTERED_REMOVED'),
+        ];
+    }
+
+    public static function getReleaseFormsArray()
+    {
+        $data = Yii::$app->cache->get(self::CACHE_KEY_RELEASE_FORM);
+
+        if ($data === false) {
+            $data = self::find()->select('release_form')->groupBy('release_form')->asArray()->all();
+            $data = ArrayHelper::getColumn($data, 'release_form');
+            $data = array_combine($data, $data);
+
+            Yii::$app->cache->set(self::CACHE_KEY_RELEASE_FORM, $data);
+        }
+
+        return $data;
+    }
+
+    public static function getDosageArray()
+    {
+        $data = Yii::$app->cache->get(self::CACHE_KEY_DOSAGE);
+
+        if ($data === false) {
+            $data = self::find()->select('dosage')->groupBy('dosage')->asArray()->all();
+            $data = ArrayHelper::getColumn($data, 'dosage');
+            $data = array_combine($data, $data);
+
+            Yii::$app->cache->set(self::CACHE_KEY_DOSAGE, $data);
+        }
+
+        return $data;
+    }
+
+    public static function getInPackageArray()
+    {
+        $data = Yii::$app->cache->get(self::CACHE_KEY_IN_PACKAGE);
+
+        if ($data === false) {
+            $data = self::find()->select('quantity_in_package')->groupBy('quantity_in_package')->asArray()->all();
+            $data = ArrayHelper::getColumn($data, 'quantity_in_package');
+            $data = array_combine($data, $data);
+
+            Yii::$app->cache->set(self::CACHE_KEY_IN_PACKAGE, $data);
+        }
+
+        return $data;
+    }
+
+    public static function getManufacturerArray()
+    {
+        $data = Yii::$app->cache->get(self::CACHE_KEY_MANUFACTURER);
+
+        if ($data === false) {
+            $data = self::find()->select('manufacturer')->groupBy('manufacturer')->asArray()->all();
+            $data = ArrayHelper::getColumn($data, 'manufacturer');
+            $data = array_combine($data, $data);
+
+            Yii::$app->cache->set(self::CACHE_KEY_MANUFACTURER, $data);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Читабельный статус
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return ($this->_status === null)
+            ? $this->_status = self::getStatusArray()[$this->status_id]
+            : $this->_status;
     }
 
     /**
@@ -64,7 +192,7 @@ class Drug extends ActiveRecord
             'dosage'              => Yii::t('app', 'Dosage'),
             'quantity_in_package' => Yii::t('app', 'Quantity In Package'),
             'manufacturer'        => Yii::t('app', 'Manufacturer'),
-            'status'              => Yii::t('app', 'Status'),
+            'status_id'           => Yii::t('app', 'Status'),
         ];
     }
 

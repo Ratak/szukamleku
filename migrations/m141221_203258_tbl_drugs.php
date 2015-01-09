@@ -18,7 +18,7 @@ class m141221_203258_tbl_drugs extends Migration
             'dosage'              => Schema::TYPE_STRING,
             'quantity_in_package' => Schema::TYPE_STRING,
             'manufacturer'        => Schema::TYPE_STRING,
-            'status'              => Schema::TYPE_SMALLINT . '(1) UNSIGNED',
+            'status_id'           => Schema::TYPE_SMALLINT . '(1) UNSIGNED',
         ], 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB');
     }
 

@@ -2,6 +2,7 @@
 
 namespace app\controllers\admin;
 
+use app\models\search\PharmacieSearch;
 use Yii;
 use app\models\Drug;
 use app\models\search\DrugSearch;
@@ -48,8 +49,15 @@ class DrugsController extends Controller
      */
     public function actionView($id)
     {
+        /* @var $model Drug */
+        $model = Drug::find()->where(['id' => $id])->with('pharmacies')->one();
+
+        $searchModel = new PharmacieSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model'        => $model,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

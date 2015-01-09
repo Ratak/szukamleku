@@ -33,11 +33,11 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'manufacturer') ?>
 
-    <?php // echo $form->field($model, 'status') ?>
+    <?php // echo $form->field($model, 'status_id') ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Search'), ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton(Yii::t('app', 'Reset'), ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('drug', 'SEARCH'), ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton(Yii::t('drug', 'RESET'), ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -1,5 +1,8 @@
 <?php
 
+use app\models\Drug;
+use kartik\widgets\Select2;
+use kartik\widgets\Typeahead;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -20,18 +23,55 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'chemical_components')->textInput(['maxlength' => 255]) ?>
 
-    <?= $form->field($model, 'release_form')->textInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'release_form')->widget(Typeahead::classname(), [
+        'dataset' => [
+            [
+                'local' => Drug::getReleaseFormsArray(),
+                'limit' => 10
+            ]
+        ],
+        'pluginOptions' => ['highlight'=>true],
+    ]) ?>
 
-    <?= $form->field($model, 'dosage')->textInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'dosage')->widget(Typeahead::classname(), [
+        'dataset' => [
+            [
+                'local' => Drug::getDosageArray(),
+                'limit' => 10
+            ]
+        ],
+        'pluginOptions' => ['highlight'=>true],
+    ]) ?>
 
-    <?= $form->field($model, 'quantity_in_package')->textInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'quantity_in_package')->widget(Typeahead::classname(), [
+        'dataset' => [
+            [
+                'local' => Drug::getInPackageArray(),
+                'limit' => 10
+            ]
+        ],
+        'pluginOptions' => ['highlight'=>true],
+    ]) ?>
 
-    <?= $form->field($model, 'manufacturer')->textInput(['maxlength' => 255]) ?>
+    <?= $form->field($model, 'manufacturer')->widget(Typeahead::classname(), [
+        'dataset' => [
+            [
+                'local' => Drug::getManufacturerArray(),
+                'limit' => 10
+            ]
+        ],
+        'pluginOptions' => ['highlight'=>true],
+    ]) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status_id')->widget(Select2::classname(), [
+        'data' => Drug::getStatusArray(),
+    ]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= ($model->isNewRecord)
+            ? Html::submitButton( Yii::t('drug', 'ADD'), ['class' => 'btn btn-success'])
+            : Html::submitButton( Yii::t('drug', 'UPDATE'), ['class' => 'btn btn-primary'])
+        ?>
     </div>
 
     <?php ActiveForm::end(); ?>
