@@ -5,6 +5,7 @@
  * @license http://www.astwellsoft.com/license/
  */
 
+use app\widgets\links\LinksWidget;
 use app\widgets\lang\LanguageWidget;
 use kartik\nav\NavX;
 use yii\helpers\Html;
@@ -42,41 +43,45 @@ AppAsset::register($this);
             echo NavX::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
-                    ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'About', 'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
+                        ['label' => 'Home', 'url' => ['/site/index']],
+                        ['label' => 'About', 'url' => ['/site/about']],
+                        ['label' => 'Contact', 'url' => ['/site/contact']],
 
-                    '<li class="divider"></li>',
-
-                    ['label' => 'Admin', 'items' => [
-                        ['label' => 'Drugs',      'url' => ['/admin/drugs']],
-                        ['label' => 'Pharmacies', 'url' => ['/admin/pharmacies']],
-                        ['label' => 'Users',      'url' => ['/admin/users']],
-                        ['label' => 'Map', 'items' => [
-                            ['label' => 'Regions',   'url' => ['/admin/map/regions']],
-                            ['label' => 'Cities',    'url' => ['/admin/map/cities']],
-                            ['label' => 'Districts', 'url' => ['/admin/map/districts']],
-                        ]],
-                    ]],
-
-                    '<li class="divider"></li>',
-
-                    ['label' => 'User', 'items' => [
-                        ['label' => 'Signup', 'url' => ['/auth/signup']],
-                        ['label' => 'recover', 'url' => ['/auth/recover']],
-                        ['label' => 'recover-confirmation', 'url' => ['/auth/recover-confirmation']],
-                    ]],
-
-                    '<li class="divider"></li>',
-
-                    Yii::$app->user->isGuest ?
-                        ['label' => 'Login', 'url' => ['/auth/login']] :
-                        [
-                            'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
-                            'url' => ['/auth/logout'],
-                            'linkOptions' => ['data-method' => 'post']
+                        '<li class="divider"></li>',
+                        ['label' => 'Admin', 'items' => [
+                            ['label' => 'Drugs',      'url' => ['/admin/drugs']],
+                            ['label' => 'Pharmacies', 'url' => ['/admin/pharmacies']],
+                            ['label' => 'Users',      'url' => ['/admin/users']],
+                            ['label' => 'Map', 'items' => [
+                                ['label' => 'Regions',   'url' => ['/admin/map/regions']],
+                                ['label' => 'Cities',    'url' => ['/admin/map/cities']],
+                                ['label' => 'Districts', 'url' => ['/admin/map/districts']],
+                            ]],
+                            '<li class="divider"></li>',
+                            ['label' => 'Posts', 'url' => ['/admin/post']],
+                            ['label' => 'Links', 'url' => ['/admin/links']],
+                            ['label' => 'Newsletter', 'url' => ['/admin/newsletters']],
                         ],
-                ],
+
+                        '<li class="divider"></li>',
+
+                        ['label' => 'User', 'items' => [
+                            ['label' => 'Signup', 'url' => ['/auth/signup']],
+                            ['label' => 'recover', 'url' => ['/auth/recover']],
+                            ['label' => 'recover-confirmation', 'url' => ['/auth/recover-confirmation']],
+                        ]],
+
+                        '<li class="divider"></li>',
+
+                        Yii::$app->user->isGuest ?
+                            ['label' => 'Login', 'url' => ['/auth/login']] :
+                            [
+                                'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
+                                'url' => ['/auth/logout'],
+                                'linkOptions' => ['data-method' => 'post']
+                            ],
+                    ],
+                ]
             ]);
             NavBar::end();
         ?>
@@ -89,6 +94,8 @@ AppAsset::register($this);
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
             <?= $content ?>
+            <hr/>
+            <?= LinksWidget::widget()?>
         </div>
     </div>
 
