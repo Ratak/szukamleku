@@ -1,7 +1,6 @@
 <?php
 
-use kartik\grid\ActionColumn;
-use kartik\grid\GridView;
+
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
