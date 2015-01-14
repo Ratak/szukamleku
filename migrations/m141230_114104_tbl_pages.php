@@ -5,7 +5,7 @@ use app\models\Language;
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m141230_114104_tpl_pages extends Migration
+class m141230_114104_tbl_pages extends Migration
 {
     public function up()
     {
