@@ -61,6 +61,7 @@ AppAsset::register($this);
                             ['label' => 'Posts', 'url' => ['/admin/post']],
                             ['label' => 'Links', 'url' => ['/admin/links']],
                             ['label' => 'Newsletter', 'url' => ['/admin/newsletters']],
+                            ['label' => 'Banners', 'url' => ['/admin/banners']],
                         ],
 
                         '<li class="divider"></li>',

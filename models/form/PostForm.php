@@ -40,9 +40,9 @@ class PostForm extends ActiveRecord
         return [
             [['name', 'content'], 'required'],
             [['name'], 'string'],
-            [['content', 'file', 'file_x', 'file_y', 'file_w', 'file_h'], 'string'],
+            [['content', 'file_x', 'file_y', 'file_w', 'file_h'], 'string'],
 
-            [['file_x', 'file_y', 'file_w', 'file_h'], 'integer'],
+            [['file'], 'file', 'skipOnEmpty' => true],
 
             [['language_id', 'user_id', 'updated_at', 'created_at'], 'integer'],
 
@@ -69,9 +69,6 @@ class PostForm extends ActiveRecord
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
-            ],
-            [
-                'class' => 'sjaakp\illustrated\Illustrated',
             ],
         ];
     }

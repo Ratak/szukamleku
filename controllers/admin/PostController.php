@@ -7,6 +7,7 @@ use yii\web\Controller;
 use app\models\form\PostForm;
 use app\models\search\PostsSearch;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 class PostController extends Controller {
 
@@ -19,6 +20,17 @@ class PostController extends Controller {
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
+    }
+
+    public function actions()
+    {
+        return [
+            'image-upload' => [
+                'class' => 'vova07\imperavi\actions\UploadAction',
+                'url' => 'http://yii2test.ru/uploads/', // Directory URL address, where files are stored.
+                'path' => '/home/srv99999/yii2test.ru/web/uploads/' // Or absolute path to directory where files are stored.
+            ],
+        ];
     }
 
     public function actionDelete($id)
@@ -37,12 +49,20 @@ class PostController extends Controller {
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $dir = Yii::getAlias('@app/public_html/images');
+
+            $file = UploadedFile::getInstance($model, 'file');
+            $file->saveAs($dir . '/' .'post_file['.time().']'  );
+
+            $model->save();
+
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
-                    'model' => $model,
-                ]);
+                'model' => $model,
+            ]);
         }
     }
 
@@ -50,6 +70,12 @@ class PostController extends Controller {
     {
         $model = new PostForm();
         if ($model->load(Yii::$app->request->post()) AND $model->validate()) {
+
+            $dir = Yii::getAlias('@app/public_html/images');
+
+            $file = UploadedFile::getInstance($model, 'file');
+            $file->saveAs($dir . '/' .'post_file['.time().']'  );
+
             $model->save();
             return $this->redirect(['index']);
         } else {

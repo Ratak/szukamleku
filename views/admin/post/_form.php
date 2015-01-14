@@ -2,8 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use vova07\imperavi\Widget;
-use sjaakp\illustrated\Uploader;
+use mihaildev\ckeditor\CKEditor;
 
 ?>
 
@@ -17,20 +16,17 @@ use sjaakp\illustrated\Uploader;
     <?= $form->field($model, 'slug')->textInput(['maxlength' => 255]) ?>
     <div class="row">
         <div class="col-xs-12 col-lg-8">
-            <?= $form->field($model, 'content')->widget(Widget::className(), [
-                    'settings' => [
-                        'lang' => 'ru',
-                        'minHeight' => 300,
-                        'pastePlainText' => true,
-                        'plugins' => [
-                            'clips',
-                        ],
-                    ]
+            <?= $form->field($model, 'content')->widget(CKEditor::className(),[
+                    'editorOptions' => [
+                    'preset' => 'full',
+                    'inline' => false,
+                    ],
                 ]);
             ?>
         </div>
+
         <div class="col-xs-12 col-lg-4 pull-right">
-            <?= $form->field($model, 'file')->widget(Uploader::className(), []) ?>
+            <?= $form->field($model, 'file')->fileInput() ?>
         </div>
     </div>
     <div class="panel panel-default">
