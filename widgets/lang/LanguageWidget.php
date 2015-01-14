@@ -17,7 +17,7 @@ class LanguageWidget extends Widget
     public function run() {
         return $this->render('widget', [
             'current' => Language::getCurrent(),
-            'langs' => Language::find()->where('id != :current_id', [':current_id' => Language::getCurrent()->id])->all(),
+            'langs'   => Language::getAll(true),
         ]);
     }
 }

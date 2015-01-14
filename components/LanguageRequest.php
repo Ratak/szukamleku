@@ -23,7 +23,9 @@ class LanguageRequest extends Request
 
             $url_list = explode('/', $this->_language_url);
 
-            $language_url = isset($url_list[1]) ? $url_list[1] : null;
+            $language_url = (isset($url_list[1]) && strlen($url_list[1]) == 2)
+                ? $url_list[1]
+                : null;
 
             Language::setCurrent($language_url);
 
