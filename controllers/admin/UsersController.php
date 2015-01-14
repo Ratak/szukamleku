@@ -54,6 +54,13 @@ class UsersController extends Controller
         ]);
     }
 
+    public function actionExpandRow()
+    {
+        return $this->renderPartial('_expand-row', [
+            'model' => $this->findModel(Yii::$app->request->post('expandRowKey')),
+        ]);
+    }
+
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -63,15 +70,15 @@ class UsersController extends Controller
     {
         $post = Yii::$app->request->post();
 
-        $user    = new User(['scenario' => 'create']);
+        $model    = new User(['scenario' => 'create']);
         $profile = new Profile(['scenario' => 'create']);
 
-        if (($user->load($post) && $profile->load($post)) && ($user->validate() && $profile->validate())) {
-            $user->setProfile($profile);
+        if (($model->load($post) && $profile->load($post)) && ($model->validate() && $profile->validate())) {
+            $model->setProfile($profile);
 
-            if($user->save(false)) {
+            if($model->save(false)) {
                 Yii::$app->session->setFlash( Yii::t('user', 'FLAH_USER_CREATE_SUCCESS') );
-                return $this->redirect(['view', 'id' => $user->id]);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
             else {
                 Yii::$app->session->setFlash( Yii::t('user', 'FLAH_USER_CREATE_ERROR') );
@@ -79,7 +86,7 @@ class UsersController extends Controller
         }
 
         return $this->render('create', [
-            'model'   => $user,
+            'model'   => $model,
             'profile' => $profile,
         ]);
     }
@@ -96,16 +103,24 @@ class UsersController extends Controller
 
         $model = $this->findModel($id);
         $model->setScenario('update');
-        $profile = $model->profile;
 
-        if ($model->load($post) && $profile->load($post) && $model->save() && $profile->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model'   => $model,
-                'profile' => $profile,
-            ]);
+        $profile = $model->profile;
+        $profile->setScenario('update');
+
+        if (($model->load($post) && $profile->load($post)) && ($model->validate() && $profile->validate())) {
+            if($model->save(false)) {
+                Yii::$app->session->setFlash( Yii::t('user', 'FLAH_USER_UPDATE_SUCCESS') );
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+            else {
+                Yii::$app->session->setFlash( Yii::t('user', 'FLAH_USER_UPDATE_ERROR') );
+            }
         }
+
+        return $this->render('update', [
+            'model'   => $model,
+            'profile' => $profile,
+        ]);
     }
 
     /**
@@ -134,8 +149,9 @@ class UsersController extends Controller
     {
         if (($model = User::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        else {
+            throw new NotFoundHttpException( Yii::t('user', 'REQUESTED_USER_DOES_NOT_EXIST'));
         }
     }
 }

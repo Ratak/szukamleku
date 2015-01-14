@@ -153,17 +153,6 @@ class User extends ActiveRecord implements IdentityInterface
         if ($this->isRelationPopulated('profile')) {
             $this->link('profile', $relatedRecords['profile']);
         }
-
-
-        if ($insert) {
-//            $profile = new Profile([
-//                'user_id' => $this->id,
-//            ]);
-//
-//            $this->populateRelation('profile', $profile);
-        }
-
-        parent::afterSave($insert, $changedAttributes);
     }
 
     // *******************************************************************

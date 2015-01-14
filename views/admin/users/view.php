@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
+$this->title = $model->email;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'USERS'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-view">
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+        <?= Html::a(Yii::t('user', 'UPDATE'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('user', 'DELETE'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('user', 'ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_ITEM?'),
                 'method' => 'post',
             ],
         ]) ?>
@@ -28,14 +28,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'status_id',
-            'role_id',
+            'status',
+            'role',
             'email:email',
-            'password_hash',
-            'auth_key',
-            'created_at',
-            'updated_at',
+            'created_at:date',
+            'updated_at:date',
+            'profile.first_name',
+            'profile.last_name',
+            'profile.phone',
+            'profile.fax',
+            'profile.legal_address',
+            'profile.postal_address',
+            'profile.krs',
         ],
     ]) ?>
 

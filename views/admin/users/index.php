@@ -2,14 +2,16 @@
 
 use app\models\User;
 use kartik\grid\ActionColumn;
+use kartik\grid\ExpandRowColumn;
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Users');
+$this->title = Yii::t('user', 'USERS');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -17,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('user', 'CREATE_USER'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -39,6 +41,14 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         'columns' => [
             [
+                'class' => ExpandRowColumn::className(),
+                'value' => function () {
+                    return GridView::ROW_COLLAPSED;
+                },
+                'detailUrl' => Url::to(['expand-row']),
+                'detailAnimationDuration' => 0
+            ],
+            [
                 'attribute' => 'email',
             ],
             [
@@ -49,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'              => User::getStatusArray(),
                 'filterType'          => GridView::FILTER_SELECT2,
                 'filterWidgetOptions' => [ 'pluginOptions' => [ 'allowClear' => true ] ],
-                'filterInputOptions'  => [ 'placeholder' => Yii::t('app', 'ANY') ],
+                'filterInputOptions'  => [ 'placeholder' => Yii::t('user', 'ANY') ],
                 'attribute'           => 'status_id',
                 'value'               => 'status',
             ],
@@ -57,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'              => User::getRoleArray(),
                 'filterType'          => GridView::FILTER_SELECT2,
                 'filterWidgetOptions' => ['pluginOptions' => ['allowClear' => true]],
-                'filterInputOptions'  => ['placeholder' => Yii::t('app', 'ANY')],
+                'filterInputOptions'  => ['placeholder' => Yii::t('user', 'ANY')],
                 'attribute'           => 'role_id',
                 'value'               => 'role',
             ],
