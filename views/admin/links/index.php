@@ -37,7 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'datetime',
                 ],
 
-                ['class' => ActionColumn::className()],
+                [
+                    'class' => ActionColumn::className(),
+                    'template' => '{update} {delete}',
+                ],
             ],
         ]); ?>
 

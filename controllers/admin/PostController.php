@@ -17,20 +17,9 @@ class PostController extends Controller {
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
-    }
-
-    public function actions()
-    {
-        return [
-            'image-upload' => [
-                'class' => 'vova07\imperavi\actions\UploadAction',
-                'url' => 'http://yii2test.ru/uploads/', // Directory URL address, where files are stored.
-                'path' => '/home/srv99999/yii2test.ru/web/uploads/' // Or absolute path to directory where files are stored.
-            ],
-        ];
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionDelete($id)
@@ -40,7 +29,7 @@ class PostController extends Controller {
         return $this->redirect(['index']);
     }
 
-    public function actionView($id)
+    public function actionView()
     {
         return $this->redirect(['index']);
     }
@@ -54,7 +43,10 @@ class PostController extends Controller {
             $dir = Yii::getAlias('@app/public_html/images');
 
             $file = UploadedFile::getInstance($model, 'file');
-            $file->saveAs($dir . '/' .'post_file['.time().']'  );
+            $file_name = md5(time()). '.' . $file->extension;
+            if($file->saveAs($dir . '/' . $file_name  )) {
+                $model->file = Yii::getAlias('@web').'/images/'.$file_name;
+            }
 
             $model->save();
 
@@ -74,7 +66,10 @@ class PostController extends Controller {
             $dir = Yii::getAlias('@app/public_html/images');
 
             $file = UploadedFile::getInstance($model, 'file');
-            $file->saveAs($dir . '/' .'post_file['.time().']'  );
+            $file_name = md5(time()). '.' . $file->extension;
+            if($file->saveAs($dir . '/' . $file_name  )) {
+                $model->file = Yii::getAlias('@web').'/images/'.$file_name;
+            }
 
             $model->save();
             return $this->redirect(['index']);

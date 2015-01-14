@@ -22,7 +22,7 @@ class Banners extends ActiveRecord
 
             [['content'], 'string'],
 
-            [['image'], 'file', 'skipOnEmpty' => true],
+            [['image'], 'file', 'skipOnEmpty' => true, 'mimeTypes' => ['image/jpeg', 'image/jpg', 'image/png'],],
 
             [['created_at', 'updated_at'], 'integer'],
         ];

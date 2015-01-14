@@ -24,7 +24,7 @@ class LinksController extends Controller {
     public function actionCreate()
     {
         $model = new Links();
-        if ($model->load(Yii::$app->request->post()) AND $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->save();
             return $this->redirect(['index']);
         } else {
@@ -52,12 +52,6 @@ class LinksController extends Controller {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    public function actionView($id)
-    {
-        $model = $this->findModel($id);
-        return $this->redirect($model->getLink());
     }
 
     protected function findModel($id)
