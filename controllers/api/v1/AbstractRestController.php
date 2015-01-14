@@ -7,6 +7,7 @@
 
 namespace app\controllers\api\v1;
 
+use app\components\StatisticBehavior;
 use yii\rest\ActiveController;
 use yii\web\Response;
 
@@ -21,6 +22,11 @@ abstract class AbstractRestController extends ActiveController
 
         $behaviors['contentNegotiator']['formats'] = [
             'application/json' => Response::FORMAT_JSON,
+        ];
+
+        $behaviors['statisticBehavior'] = [
+            'class' => StatisticBehavior::className(),
+            'actions' => ['view'],
         ];
 
         return $behaviors;
