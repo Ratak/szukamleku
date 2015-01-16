@@ -377,6 +377,23 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        unset(
+            $fields['password_hash'],
+            $fields['auth_key'],
+            $fields['status_id'],
+            $fields['role_id']
+        );
+
+        return array_combine($fields, $fields);
+    }
+
     // *******************************************************************
     // * METHODS
     // *******************************************************************/
