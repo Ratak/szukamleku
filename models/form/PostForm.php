@@ -28,10 +28,6 @@ use app\models\Language;
  */
 class PostForm extends ActiveRecord
 {
-    public $file_x = 0;
-    public $file_y = 0;
-    public $file_w = 0;
-    public $file_h = 0;
     /**
      * @return array the validation rules.
      */
@@ -40,9 +36,9 @@ class PostForm extends ActiveRecord
         return [
             [['name', 'content'], 'required'],
             [['name'], 'string'],
-            [['content', 'file', 'file_x', 'file_y', 'file_w', 'file_h'], 'string'],
+            [['content'], 'string'],
 
-            [['file_x', 'file_y', 'file_w', 'file_h'], 'integer'],
+            [['file'], 'file', 'skipOnEmpty' => true, 'mimeTypes' => ['image/jpeg', 'image/jpg', 'image/png'],],
 
             [['language_id', 'user_id', 'updated_at', 'created_at'], 'integer'],
 
@@ -69,9 +65,6 @@ class PostForm extends ActiveRecord
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'updated_at',
-            ],
-            [
-                'class' => 'sjaakp\illustrated\Illustrated',
             ],
         ];
     }

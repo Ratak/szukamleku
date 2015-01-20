@@ -44,6 +44,7 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                         ['label' => 'Home', 'url' => ['/site/index']],
+                        ['label' => 'Posts', 'url' => ['/site/posts']],
                         ['label' => 'About', 'url' => ['/site/about']],
                         ['label' => 'Contact', 'url' => ['/site/contact']],
 
@@ -73,6 +74,7 @@ AppAsset::register($this);
                             ['label' => 'Posts', 'url' => ['/admin/post']],
                             ['label' => 'Links', 'url' => ['/admin/links']],
                             ['label' => 'Newsletter', 'url' => ['/admin/newsletters']],
+                            ['label' => 'Banners', 'url' => ['/admin/banners']],
                         ],
                     ],
                 ]

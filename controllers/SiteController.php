@@ -9,12 +9,11 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\rest\ActiveController;
 use app\models\form\ContactForm;
 
 class SiteController extends Controller
 {
-
-
     public function actions()
     {
         return [
@@ -51,4 +50,10 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionPosts()
+    {
+        return $this->render('posts');
+    }
+
 }
