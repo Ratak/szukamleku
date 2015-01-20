@@ -69,6 +69,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['role_id', 'in',      'range' => array_keys( self::getRoleArray() )],
             ['role_id', 'default', 'value' => self::ROLE_USER],
 
+            ['company', 'required', 'on' => ['signup']],
             ['company', 'string'],
 
             // Язык [[language]]
@@ -153,17 +154,6 @@ class User extends ActiveRecord implements IdentityInterface
         if ($this->isRelationPopulated('profile')) {
             $this->link('profile', $relatedRecords['profile']);
         }
-
-
-        if ($insert) {
-//            $profile = new Profile([
-//                'user_id' => $this->id,
-//            ]);
-//
-//            $this->populateRelation('profile', $profile);
-        }
-
-        parent::afterSave($insert, $changedAttributes);
     }
 
     // *******************************************************************
@@ -386,6 +376,23 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             TimestampBehavior::className(),
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        unset(
+            $fields['password_hash'],
+            $fields['auth_key'],
+            $fields['status_id'],
+            $fields['role_id']
+        );
+
+        return array_combine($fields, $fields);
     }
 
     // *******************************************************************

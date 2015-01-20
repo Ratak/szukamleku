@@ -19,8 +19,36 @@ use yii\db\ActiveRecord;
  */
 class Language extends ActiveRecord
 {
+    const CACHE_KEY_ALL_LANGUAGES = 'cache_key_all_languages';
+    const CACHE_KEY_ALL_LANGUAGES_EXCEPT = 'cache_key_all_languages_except';
+    const CACHE_DURATION = 60;
+
     /* @var Language Переменная, для хранения текущего объекта языка */
     static $current = null;
+
+    public static function getAll($exceptCurrent = false)
+    {
+        $curent = Language::getCurrent()->id;
+        $cache = $exceptCurrent
+            ? self::CACHE_KEY_ALL_LANGUAGES
+            : self::CACHE_KEY_ALL_LANGUAGES_EXCEPT . $curent;
+
+        $return = Yii::$app->cache->get($cache);
+
+        if ($return === false) {
+            $return = Language::find();
+
+            if($exceptCurrent) {
+                $return->where('id != :current_id', [':current_id' => $curent]);
+            }
+
+            $return = $return->all();
+
+            Yii::$app->cache->set($cache, $return, $cache);
+        }
+
+        return $return;
+    }
 
     /**
      * Получение текущего объекта языка

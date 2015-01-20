@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\User */
 /* @var $profile app\models\Profile */
 
-$this->title = Yii::t('app', 'UPDATE_USER: {email}', ['email' => $model->email]);
+$this->title = Yii::t('user', 'UPDATE_USER: {email}', ['email' => $model->email]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'USERS'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->email, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('user', 'UPDATE');

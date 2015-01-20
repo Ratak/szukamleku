@@ -34,14 +34,31 @@ class Profile extends ActiveRecord
     {
         /* TODO */
         return [
-            ['first_name', 'string'],
-            ['last_name', 'string'],
-            ['phone', 'string'],
-            ['fax', 'string'],
-            ['legal_address', 'string'],
+            ['first_name',     'required', 'on' => ['signup']],
+            ['first_name',     'string'],
+
+            ['last_name',      'required', 'on' => ['signup']],
+            ['last_name',      'string'],
+
+            ['phone',          'required', 'on' => ['signup']],
+            ['phone',          'string'],
+
+            ['fax',            'string'],
+
+            ['legal_address',  'required', 'on' => ['signup']],
+            ['legal_address',  'string'],
+
+            ['postal_address', 'required', 'on' => ['signup']],
             ['postal_address', 'string'],
-            ['krs', 'string'],
+
+            ['krs',            'required', 'on' => ['signup']],
+            ['krs',            'string'],
         ];
+    }
+
+    public function getName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**

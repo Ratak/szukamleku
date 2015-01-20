@@ -199,6 +199,17 @@ class Drug extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public function fields()
+    {
+        $fields = parent::fields();
+        $fields['status'] = 'status';
+
+        return $fields;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function extraFields()
     {
         return [

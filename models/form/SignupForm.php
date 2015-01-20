@@ -42,56 +42,56 @@ class SignupForm extends Model
     /**
      * @return array the validation rules.
      */
-    public function rules()
-    {
-        return [
-            ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'required'],
-            ['email', 'string', 'max' => 100],
-            ['email', 'email'],
-            ['email', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('auth', 'EMAIL_HAS_ALREADY_BEEN_TAKEN')],
-
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6, 'max' => 30],
-
-            ['repassword', 'required'],
-            ['repassword', 'string', 'min' => 6, 'max' => 30],
-            ['repassword', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false],
-
-            ['company', 'filter', 'filter' => 'trim'],
-            ['company', 'required'],
-            ['company', 'string', 'max' => 255],
-
-            ['first_name', 'filter', 'filter' => 'trim'],
-            ['first_name', 'required'],
-            ['first_name', 'string', 'max' => 255],
-
-            ['last_name', 'filter', 'filter' => 'trim'],
-            ['last_name', 'required'],
-            ['last_name', 'string', 'max' => 255],
-
-            ['phone', 'filter', 'filter' => 'trim'],
-            ['phone', 'string', 'max' => 255],
-
-            ['fax', 'filter', 'filter' => 'trim'],
-            ['fax', 'string', 'max' => 255],
-
-            ['legal_address', 'filter', 'filter' => 'trim'],
-            ['legal_address', 'required'],
-            ['legal_address', 'string', 'max' => 255],
-
-            ['postal_address', 'filter', 'filter' => 'trim'],
-            ['postal_address', 'required'],
-            ['postal_address', 'string', 'max' => 255],
-
-            ['krs', 'filter', 'filter' => 'trim'],
-            ['krs', 'required'],
-            ['krs', 'string', 'max' => 255],
-
-            ['acept_legal', 'required'],
-            ['acept_legal', 'required', 'requiredValue' => '1', 'message' => Yii::t('auth', 'NOT_ACEPT_LEGAL') ],
-        ];
-    }
+//    public function rules()
+//    {
+//        return [
+//            ['email', 'filter', 'filter' => 'trim'],
+//            ['email', 'required'],
+//            ['email', 'string', 'max' => 100],
+//            ['email', 'email'],
+//            ['email', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('auth', 'EMAIL_HAS_ALREADY_BEEN_TAKEN')],
+//
+//            ['password', 'required'],
+//            ['password', 'string', 'min' => 6, 'max' => 30],
+//
+//            ['repassword', 'required'],
+//            ['repassword', 'string', 'min' => 6, 'max' => 30],
+//            ['repassword', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false],
+//
+//            ['company', 'filter', 'filter' => 'trim'],
+//            ['company', 'required'],
+//            ['company', 'string', 'max' => 255],
+//
+//            ['first_name', 'filter', 'filter' => 'trim'],
+//            ['first_name', 'required'],
+//            ['first_name', 'string', 'max' => 255],
+//
+//            ['last_name', 'filter', 'filter' => 'trim'],
+//            ['last_name', 'required'],
+//            ['last_name', 'string', 'max' => 255],
+//
+//            ['phone', 'filter', 'filter' => 'trim'],
+//            ['phone', 'string', 'max' => 255],
+//
+//            ['fax', 'filter', 'filter' => 'trim'],
+//            ['fax', 'string', 'max' => 255],
+//
+//            ['legal_address', 'filter', 'filter' => 'trim'],
+//            ['legal_address', 'required'],
+//            ['legal_address', 'string', 'max' => 255],
+//
+//            ['postal_address', 'filter', 'filter' => 'trim'],
+//            ['postal_address', 'required'],
+//            ['postal_address', 'string', 'max' => 255],
+//
+//            ['krs', 'filter', 'filter' => 'trim'],
+//            ['krs', 'required'],
+//            ['krs', 'string', 'max' => 255],
+//
+//            ['acept_legal', 'required'],
+//            ['acept_legal', 'required', 'requiredValue' => '1', 'message' => Yii::t('auth', 'NOT_ACEPT_LEGAL') ],
+//        ];
+//    }
 
     /** @inheritdoc */
     public function attributeLabels()
@@ -125,29 +125,32 @@ class SignupForm extends Model
      */
     public function signup()
     {
-        if(!$this->validate()) {
-            return false;
-        }
+//        if(!$this->validate()) {
+//            return false;
+//        }
 
-        $attr = $this->getAttributes();
+        $attr = Yii::$app->request->post();
 
         $user    = new User(['scenario' => 'signup']);
         $profile = new Profile(['scenario' => 'signup']);
 
-        if(($user->load($attr, false) && $profile->load($attr, false)) && ($user->validate() && $profile->validate())) {
+        $user->setAttributes($attr);
+        $profile->setAttributes($attr);
+
+        $userValid = $user->validate();
+        $profileValid = $profile->validate();
+
+        if($userValid && $profileValid) {
             $user->setProfile($profile);
 
             if($user->save(false)) {
-                Yii::$app->session->setFlash( Yii::t('auth', 'FLAH_SIGNUP_SENT') );
                 Yii::info('User has been registered');
                 return true;
             }
-            else {
-                Yii::$app->session->setFlash( Yii::t('auth', 'FLAH_SIGNUP_ERROR') );
-                Yii::error('An error occurred while registering user account');
-                return false;
-            }
         }
+
+        $this->addErrors($user->getErrors());
+        $this->addErrors($profile->getErrors());
 
         return false;
     }

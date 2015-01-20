@@ -20,10 +20,11 @@
         "yiisoft/yii2-swiftmailer": "*",
 
         "letyii/yii2-rbac-cached": "*",
+        "vova07/yii2-imperavi-widget": "*",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-nav-x": "*",
-		"mihaildev/yii2-ckeditor": "*"
+        "sjaakp/yii2-illustrated-behavior": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

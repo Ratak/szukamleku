@@ -48,7 +48,20 @@ AppAsset::register($this);
                         ['label' => 'About', 'url' => ['/site/about']],
                         ['label' => 'Contact', 'url' => ['/site/contact']],
 
-                        '<li class="divider"></li>',
+                        ['label' => 'User', 'items' => [
+                            ['label' => 'Signup', 'url' => ['/auth/signup']],
+                            ['label' => 'recover', 'url' => ['/auth/recover']],
+                            ['label' => 'recover-confirmation', 'url' => ['/auth/recover-confirmation']],
+                        ]],
+
+                        Yii::$app->user->isGuest
+                            ? ['label' => 'Login', 'url' => ['/auth/login']]
+                            : [
+                            'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
+                            'url' => ['/auth/logout'],
+                            'linkOptions' => ['data-method' => 'post']
+                        ],
+
                         ['label' => 'Admin', 'items' => [
                             ['label' => 'Drugs',      'url' => ['/admin/drugs']],
                             ['label' => 'Pharmacies', 'url' => ['/admin/pharmacies']],
@@ -58,30 +71,11 @@ AppAsset::register($this);
                                 ['label' => 'Cities',    'url' => ['/admin/map/cities']],
                                 ['label' => 'Districts', 'url' => ['/admin/map/districts']],
                             ]],
-                            '<li class="divider"></li>',
                             ['label' => 'Posts', 'url' => ['/admin/post']],
                             ['label' => 'Links', 'url' => ['/admin/links']],
                             ['label' => 'Newsletter', 'url' => ['/admin/newsletters']],
                             ['label' => 'Banners', 'url' => ['/admin/banners']],
                         ],
-
-                        '<li class="divider"></li>',
-
-                        ['label' => 'User', 'items' => [
-                            ['label' => 'Signup', 'url' => ['/auth/signup']],
-                            ['label' => 'recover', 'url' => ['/auth/recover']],
-                            ['label' => 'recover-confirmation', 'url' => ['/auth/recover-confirmation']],
-                        ]],
-
-                        '<li class="divider"></li>',
-
-                        Yii::$app->user->isGuest ?
-                            ['label' => 'Login', 'url' => ['/auth/login']] :
-                            [
-                                'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
-                                'url' => ['/auth/logout'],
-                                'linkOptions' => ['data-method' => 'post']
-                            ],
                     ],
                 ]
             ]);
