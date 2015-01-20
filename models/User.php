@@ -69,6 +69,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['role_id', 'in',      'range' => array_keys( self::getRoleArray() )],
             ['role_id', 'default', 'value' => self::ROLE_USER],
 
+            ['company', 'required', 'on' => ['signup']],
             ['company', 'string'],
 
             // Язык [[language]]
