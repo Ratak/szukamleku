@@ -4,6 +4,7 @@ namespace app\controllers\api\v1;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\rest\Action;
 
 class CitiesController extends AbstractRestController
 {
@@ -28,11 +29,11 @@ class CitiesController extends AbstractRestController
     /**
      * Prepares the data provider that should return the requested collection of the models.
      *
-     * @param \yii\rest\Action $action
+     * @param Action $action
      *
      * @return ActiveDataProvider
      */
-    public static function prepareDataProvider(\yii\rest\Action $action)
+    public static function prepareDataProvider(Action $action)
     {
         /* @var $modelClass \app\models\City */
         $modelClass = $action->modelClass;
