@@ -1,6 +1,5 @@
 <?php
 
-use app\models\User;
 use app\models\Language;
 use yii\db\Schema;
 use yii\db\Migration;
@@ -11,7 +10,7 @@ class m141230_114115_tpl_pages_lang extends Migration
     {
         $this->createTable('{{%pages_lang}}', [
                 'id'           => Schema::TYPE_PK,
-                'post_id'  => Schema::TYPE_INTEGER,
+                'post_id'      => Schema::TYPE_INTEGER,
                 'language_id'  => Schema::TYPE_INTEGER,
                 'name'         => Schema::TYPE_STRING   . ' NOT NULL',
                 'content'      => Schema::TYPE_TEXT     . ' NOT NULL',
@@ -20,6 +19,14 @@ class m141230_114115_tpl_pages_lang extends Migration
                 'meta_title'   => Schema::TYPE_STRING   . ' NOT NULL',
             ], 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB'
         );
+
+        $this->addForeignKey(
+            'FK_post_lang_language_id',
+            '{{%pages_lang}}','language_id',
+            Language::tableName(), 'id',
+            'CASCADE', 'CASCADE'
+        );
+
     }
 
     public function down()

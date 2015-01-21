@@ -19,9 +19,8 @@ class PostsSearch extends PostForm
     {
         return [
             [['name', 'content'], 'string'],
-            [['content', 'file', 'file_x', 'file_y', 'file_w', 'file_h'], 'string'],
+            [['content', 'file'], 'string'],
 
-            [['file_x', 'file_y', 'file_w', 'file_h'], 'integer'],
 
             [['language_id', 'user_id', 'updated_at', 'created_at'], 'integer'],
             [['slug', 'meta_keys', 'meta_desc', 'meta_title'], 'string', 'max' => 255],

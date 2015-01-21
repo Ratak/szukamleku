@@ -18,7 +18,8 @@ class Banners extends ActiveRecord
     {
         return [
             [['name', 'link'], 'required'],
-            [['name', 'link'], 'string'],
+            [['name'], 'string'],
+            [['link'], 'url'],
 
             [['content'], 'string'],
 
@@ -49,6 +50,16 @@ class Banners extends ActiveRecord
             'image'               => Yii::t('banners', 'IMAGE'),
             'created_at'          => Yii::t('banners', 'CREATED_AT'),
             'updated_at'          => Yii::t('banners', 'UPDATED_AT'),
+        ];
+    }
+
+    public function extraFields()
+    {
+        return [
+            'name',
+            'link',
+            'content',
+            'image'
         ];
     }
 }

@@ -11,6 +11,7 @@ use Yii;
 use yii\web\Controller;
 use yii\rest\ActiveController;
 use app\models\form\ContactForm;
+use app\models\form\NewsletterForm;
 
 class SiteController extends Controller
 {
@@ -56,4 +57,20 @@ class SiteController extends Controller
         return $this->render('posts');
     }
 
+    public function actionNewsletters()
+    {
+        $model = new NewsletterForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->isNewRecord) {
+            $model->save();
+            Yii::$app->session->setFlash('userSubscribe');
+        }
+        elseif($model->load(Yii::$app->request->post()) && $model->validate() && !$model->isNewRecord) {
+            $model->delete();
+            Yii::$app->session->setFlash('userUnsubscribe');
+        }
+        return $this->render('newsletters',[
+            'model' => $model
+        ]);
+    }
 }

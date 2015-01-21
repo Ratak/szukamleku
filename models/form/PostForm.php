@@ -85,4 +85,14 @@ class PostForm extends ActiveRecord
             'created_at'          => Yii::t('post_form', 'CREATED_AT'),
         ];
     }
+
+    public function extraFields()
+    {
+        return [
+            'name',
+            'content',
+            'file',
+            'slug'
+        ];
+    }
 }

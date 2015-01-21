@@ -94,4 +94,5 @@ class AuthController extends Controller
     {
         return $this->render('recover-confirmation');
     }
+
 }

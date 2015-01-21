@@ -14,6 +14,7 @@ Thumbs.db
 
 # composer vendor dir
 /vendor
+/migrations/m250107_115110_insert_drugs.php
 
 # composer itself is not needed
 composer.phar
