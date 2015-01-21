@@ -7,6 +7,7 @@ use yii\web\Controller;
 use app\models\Newsletters;
 use app\models\search\NewslettersSearch;
 
+
 class NewslettersController extends Controller {
 
     public function actionIndex()
