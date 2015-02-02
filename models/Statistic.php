@@ -111,16 +111,18 @@ class Statistic extends ActiveRecord
             $dayInterval = time() - 24 * 60 * 60;
             $table = self::tablename();
 
+            $sql = 'SELECT COUNT(*) AS itemsPharmacies, (SELECT COUNT(*) FROM `pharmacies_drugs`) AS itemsDrugs FROM `pharmacies`';
+            $items = Yii::$app->getDb()->createCommand($sql)->queryOne();
+
             $sql = "SELECT SUM(`unique`) AS totalUnique, SUM(`non_unique`) AS totalNonUnique FROM $table";
-            $total = Yii::$app->getDb()->createCommand($sql)
-                ->queryOne();
+            $total = Yii::$app->getDb()->createCommand($sql)->queryOne();
 
-            $sql = "SELECT SUM(`unique`) AS dayUnique, SUM(`non_unique`) AS dayNonUnique FROM $table WHERE created_at > :created_at";
+            $sql = "SELECT SUM(`unique`) AS dayUnique, SUM(`non_unique`) AS dayNonUnique FROM $table WHERE created_at > :at";
             $day = Yii::$app->getDb()->createCommand($sql)
-                ->bindParam(':created_at', $dayInterval)
+                ->bindParam(':at', $dayInterval)
                 ->queryOne();
 
-            $return = array_merge($total, $day);
+            $return = array_merge(array_merge($total, $items), $day);
 
             Yii::$app->cache->set(self::CACHE_TOTAL_KEY, $return, self::CACHE_TOTAL_DURATION);
         }
