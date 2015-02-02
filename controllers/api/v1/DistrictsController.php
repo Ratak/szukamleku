@@ -2,8 +2,10 @@
 
 namespace app\controllers\api\v1;
 
+use app\models\Pharmacie;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\rest\Action;
 
 class DistrictsController extends AbstractRestController
 {
@@ -25,20 +27,27 @@ class DistrictsController extends AbstractRestController
     }
 
     /**
-     * Prepares the data provider that should return the requested collection of the models.
-     *
-     * @param \yii\rest\Action $action
+     * @param Action $action
      *
      * @return ActiveDataProvider
      */
-    public static function prepareDataProvider(\yii\rest\Action $action)
+    public static function prepareDataProvider(Action $action)
     {
         /* @var $modelClass \app\models\City */
         $modelClass = $action->modelClass;
 
-        $query = ( null !== $city_id = Yii::$app->request->get('city_id'))
-            ? $modelClass::find()->where('city_id = :city_id', [':city_id' => $city_id])
-            : $modelClass::find();
+        $query = $modelClass::find();
+
+        if($city_id = Yii::$app->request->get('city_id')) {
+            $query->where('city_id = :city_id', [':city_id' => $city_id]);
+        }
+
+        if($first_letters = Yii::$app->request->get('first_letters')) {
+            $query->andFilterWhere(['like', 'name', $first_letters . '%', false]);
+        }
+
+        $query->join('INNER JOIN', Pharmacie::tableName(), "`map_districts`.`id` = `pharmacies`.`district_id`")
+            ->groupBy('`pharmacies`.`district_id`');
 
         return new ActiveDataProvider([
             'query' => $query,
