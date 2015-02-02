@@ -16,6 +16,21 @@ use yii\db\ActiveRecord;
  */
 class PharmaciesDrugs extends ActiveRecord
 {
+    const SCENARIO_IMPORT = 'import';
+
+    public $pharmacieCode;
+    public $drugName;
+    public $manufacturer;
+    public $price;
+    public $quantity;
+    public $date;
+
+    /* var Pharmacie $importPharmacie */
+    protected $importPharmacie;
+
+    /* var Drug $importDrug */
+    protected $importDrug;
+
     /**
      * @inheritdoc
      */
@@ -45,8 +60,40 @@ class PharmaciesDrugs extends ActiveRecord
     public function rules()
     {
         return [
-            [['pharmacie_id', 'drug_id'], 'required'],
-            [['pharmacie_id', 'drug_id', 'created_at'], 'integer']
+            // pharmacieCode
+            ['pharmacieCode', 'trim'],
+            ['pharmacieCode', 'required',              'on' => [self::SCENARIO_IMPORT]],
+            ['pharmacieCode', 'validatePharmacieCode', 'on' => [self::SCENARIO_IMPORT]],
+
+            // pharmacie_id
+            ['pharmacie_id', 'default', 'on' => [self::SCENARIO_IMPORT], 'value' => $this->getPharmacieId()],
+            ['pharmacie_id', 'required'],
+            ['pharmacie_id', 'integer'],
+
+            // drugName
+            ['drugName', 'trim'],
+            ['drugName', 'required',         'on' => [self::SCENARIO_IMPORT]],
+            ['drugName', 'validateDrugName', 'on' => [self::SCENARIO_IMPORT]],
+
+            // drug_id
+            ['drug_id', 'default', 'on' => [self::SCENARIO_IMPORT], 'value' => $this->getDrugId()],
+            ['drug_id', 'required'],
+            ['drug_id', 'integer'],
+
+            // manufacturer
+            ['manufacturer', 'trim'],
+
+            // price
+            ['price', 'trim'],
+            ['price', 'required', 'on' => [self::SCENARIO_IMPORT]],
+
+            // quantity
+            ['quantity', 'trim'],
+            ['quantity', 'required', 'on' => [self::SCENARIO_IMPORT]],
+
+            // date
+            ['date', 'trim'],
+            ['date', 'required', 'on' => [self::SCENARIO_IMPORT]],
         ];
     }
 
@@ -60,6 +107,20 @@ class PharmaciesDrugs extends ActiveRecord
             'drug_id'      => Yii::t('app', 'Drug ID'),
             'created_at'   => Yii::t('app', 'Created At'),
         ];
+    }
+
+    public function validatePharmacieCode($attribute)
+    {
+        if (!self::getPharmacieByCode()) {
+            $this->addError($attribute, 'Pharmacie code invalid');
+        }
+    }
+
+    public function validateDrugName($attribute)
+    {
+        if (!self::getDrugByName()) {
+            $this->addError($attribute, 'Drug name invalid');
+        }
     }
 
     /**
@@ -76,5 +137,34 @@ class PharmaciesDrugs extends ActiveRecord
     public function getPharmacie()
     {
         return $this->hasOne(Pharmacie::className(), ['id' => 'pharmacie_id']);
+    }
+
+    public function getDrugByName()
+    {
+        if(!$this->importDrug) {
+            $this->importDrug = Pharmacie::findByCode($this->drugName);
+        }
+
+        return $this->importDrug;
+    }
+
+    public function getPharmacieByCode() {
+        if(!$this->importPharmacie) {
+            $this->importPharmacie = Pharmacie::findByCode($this->pharmacieCode);
+        }
+
+        return $this->importPharmacie;
+    }
+
+    public function getPharmacieId() {
+        return ($pharmacie = $this->getPharmacieByCode())
+            ? $pharmacie->id
+            : null;
+    }
+
+    public function getDrugId() {
+        return ($drug = $this->getDrugByName())
+            ? $drug->id
+            : null;
     }
 }
