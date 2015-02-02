@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  * @property integer  $region_id
  * @property integer  $city_id
  * @property integer  $district_id
+ * @property string   $code
  * @property string   $name
  * @property string   $latitude
  * @property string   $longitude
@@ -89,7 +90,7 @@ class Pharmacie extends ActiveRecord
         return [
             [['latitude', 'longitude'], 'number'],
             [['region_id', 'city_id', 'district_id'], 'integer'],
-            [['name', 'phone', 'fax', 'url', 'email', 'address'], 'string', 'max' => 255]
+            [['code', 'name', 'phone', 'fax', 'url', 'email', 'address'], 'string', 'max' => 255]
         ];
     }
 
@@ -100,10 +101,11 @@ class Pharmacie extends ActiveRecord
     {
         return [
             'id'          => Yii::t('app', 'ID'),
+            'code'        => Yii::t('app', 'Code'),
             'name'        => Yii::t('app', 'Name'),
             'latitude'    => Yii::t('app', 'Latitude'),
             'longitude'   => Yii::t('app', 'Longitude'),
-            'phone'         => Yii::t('app', 'phone'),
+            'phone'       => Yii::t('app', 'phone'),
             'fax'         => Yii::t('app', 'Fax'),
             'url'         => Yii::t('app', 'Url'),
             'email'       => Yii::t('app', 'Email'),
@@ -126,5 +128,10 @@ class Pharmacie extends ActiveRecord
             'district',
             'drugs',
         ];
+    }
+
+    public static function findByCode($code)
+    {
+        return self::findOne(['code = :code', [':code' => $code]]);
     }
 }
