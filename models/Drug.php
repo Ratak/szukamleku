@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -31,10 +32,11 @@ class Drug extends ActiveRecord
     const STATUS_EXPIRED              = 5;
     const STATUS_EXPIRED_REMOVED      = 6;
 
-    const CACHE_KEY_RELEASE_FORM = 'cache_key_release_form';
-    const CACHE_KEY_DOSAGE       = 'cache_key_dosage';
-    const CACHE_KEY_IN_PACKAGE   = 'cache_key_in_package';
-    const CACHE_KEY_MANUFACTURER = 'cache_key_manufacturer';
+    const CACHE_KEY_RELEASE_FORM  = 'cache_key_release_form';
+    const CACHE_KEY_DOSAGE        = 'cache_key_dosage';
+    const CACHE_KEY_IN_PACKAGE    = 'cache_key_in_package';
+    const CACHE_KEY_MANUFACTURER  = 'cache_key_manufacturer';
+    const CACHE_KEY_FIRST_LETTERS = 'cache_key_first_letters';
 
     /** @var string Читабельный статус */
     private $_status;
@@ -42,6 +44,10 @@ class Drug extends ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
+
+        if(isset($changedAttributes['name'])) {
+            Yii::$app->cache->delete(self::CACHE_KEY_FIRST_LETTERS);
+        }
 
         if(isset($changedAttributes['release_form'])) {
             Yii::$app->cache->delete(self::CACHE_KEY_RELEASE_FORM);
@@ -161,6 +167,27 @@ class Drug extends ActiveRecord
 
             Yii::$app->cache->set(self::CACHE_KEY_MANUFACTURER, $data);
         }
+
+        return $data;
+    }
+
+    public static function getFirstLetters()
+    {
+//        $data = Yii::$app->cache->get(self::CACHE_KEY_FIRST_LETTERS);
+
+//        if ($data === false) {
+            $data = (new Query())
+                ->select(['DISTINCT LEFT(name, 1) as l'])
+                ->from(self::tableName())
+                ->all();
+
+            $data = ArrayHelper::getColumn($data, 'l');
+
+//        uksort($data, 'strcasecmp');
+//        natsort($data);
+//
+//            Yii::$app->cache->set(self::CACHE_KEY_FIRST_LETTERS, $data);
+//        }
 
         return $data;
     }
