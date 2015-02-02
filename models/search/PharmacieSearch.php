@@ -19,7 +19,7 @@ class PharmacieSearch extends Pharmacie
     {
         return [
             [['id', 'user_id', 'region_id', 'city_id', 'district_id'], 'integer'],
-            [['name', 'phone', 'fax', 'url', 'email', 'address'], 'safe'],
+            [['code', 'name', 'phone', 'fax', 'url', 'email', 'address'], 'safe'],
             [['latitude', 'longitude'], 'number'],
         ];
     }
@@ -61,6 +61,7 @@ class PharmacieSearch extends Pharmacie
                 'city_id'     => $this->city_id,
                 'district_id' => $this->district_id,
             ])
+            ->andFilterWhere(['like', 'code', $this->code])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'phone', $this->phone])
             ->andFilterWhere(['like', 'fax', $this->fax])
