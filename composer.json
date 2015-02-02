@@ -23,8 +23,7 @@
         "vova07/yii2-imperavi-widget": "*",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-widgets": "*",
-        "kartik-v/yii2-nav-x": "*",
-        "sjaakp/yii2-illustrated-behavior": "*"
+        "kartik-v/yii2-nav-x": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
