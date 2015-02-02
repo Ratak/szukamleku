@@ -30,8 +30,8 @@ class Language extends ActiveRecord
     {
         $curent = Language::getCurrent()->id;
         $cache = $exceptCurrent
-            ? self::CACHE_KEY_ALL_LANGUAGES
-            : self::CACHE_KEY_ALL_LANGUAGES_EXCEPT . $curent;
+            ? self::CACHE_KEY_ALL_LANGUAGES_EXCEPT . $curent
+            : self::CACHE_KEY_ALL_LANGUAGES;
 
         $return = Yii::$app->cache->get($cache);
 
