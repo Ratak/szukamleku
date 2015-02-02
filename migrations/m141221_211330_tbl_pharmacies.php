@@ -15,6 +15,7 @@ class m141221_211330_tbl_pharmacies extends Migration
             'region_id'   => Schema::TYPE_INTEGER,
             'city_id'     => Schema::TYPE_INTEGER . ' NULL',
             'district_id' => Schema::TYPE_INTEGER . ' NULL',
+            'code'        => Schema::TYPE_STRING,
             'name'        => Schema::TYPE_STRING,
             'latitude'    => Schema::TYPE_DECIMAL . '(12,9)',
             'longitude'   => Schema::TYPE_DECIMAL . '(12,9)',
