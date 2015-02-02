@@ -19,6 +19,7 @@ use kartik\grid\GridView;
     'filterModel' => $searchModel,
     'columns' => [
         'user.company',
+        'code',
         'name',
         // 'latitude',
         // 'longitude',
