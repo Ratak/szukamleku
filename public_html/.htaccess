@@ -19,7 +19,7 @@
   php_value session.cookie_httponly true
 </IfModule>
 
-
+Header set Access-Control-Allow-Origin "*"
 
 <IfModule mod_rewrite.c>
   RewriteEngine on
