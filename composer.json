@@ -19,7 +19,6 @@
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
 
-        "letyii/yii2-rbac-cached": "*",
         "vova07/yii2-imperavi-widget": "*",
         "kartik-v/yii2-grid": "*",
         "kartik-v/yii2-widgets": "*",
