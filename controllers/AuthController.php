@@ -63,7 +63,7 @@ class AuthController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             Language::setCurrent(Yii::$app->user->identity->language);
 
-            return $this->goBack();
+            return Yii::$app->response->redirect(Yii::$app->user->getReturnUrl());
         }
 
         return $this->render('login', [
