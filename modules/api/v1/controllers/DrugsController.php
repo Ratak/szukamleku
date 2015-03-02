@@ -1,22 +1,30 @@
 <?php
 
-namespace app\controllers\api\v1;
+namespace app\modules\api\v1\controllers;
 
+use app\models\PharmaciesDrugs;
+use app\modules\api\v1\components\ActiveControllerStatistic;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\rest\Action;
 
-class DrugsController extends AbstractRestController
+class DrugsController extends ActiveControllerStatistic
 {
     /**
      * @inheritdoc
      */
     public $modelClass = 'app\models\Drug';
 
-//    public $serializer = [
-//        'class' => 'yii\rest\Serializer',
-//        'collectionEnvelope' => 'items',
-//    ];
+    /**
+     * @inheritdoc
+     */
+    protected function verbs()
+    {
+        $verbs = parent::verbs();
+        $verbs['get-firs-letters'] = ['GET'];
+
+        return $verbs;
+    }
 
     /**
      * @inheritdoc
@@ -50,7 +58,12 @@ class DrugsController extends AbstractRestController
 
         $query = $modelClass::find();
 
-        if($first_letters = Yii::$app->request->get('first_letters')) {
+        if ((int)$pharmacyId = Yii::$app->request->get('pharmacyId')) {
+            $query->join('LEFT OUTER JOIN', ['pd' => PharmaciesDrugs::tableName()], '`id` = `pd`.`drug_id`')
+                ->where(['`pd`.`pharmacie_id`' => $pharmacyId]);
+        }
+
+        if ($first_letters = Yii::$app->request->get('first_letters')) {
             $query->andFilterWhere(['like', 'name', $first_letters . '%', false]);
         }
 

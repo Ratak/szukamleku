@@ -1,26 +1,23 @@
 <?php
 
-namespace app\controllers\api\v1;
+namespace app\modules\api\v1\controllers;
 
 use app\models\Statistic;
+use app\modules\api\v1\components\Controller;
 use Yii;
-use yii\rest\Controller;
-use yii\web\Response;
 
 class StatisticsController extends Controller
 {
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    protected function verbs()
     {
-        $behaviors = parent::behaviors();
-
-        $behaviors['contentNegotiator']['formats'] = [
-            'application/json' => Response::FORMAT_JSON,
+        return [
+            'index'              => ['GET'],
+            'popular-drugs'      => ['GET'],
+            'popular-pharmacies' => ['GET'],
         ];
-
-        return $behaviors;
     }
 
     public function actionIndex()
@@ -37,5 +34,4 @@ class StatisticsController extends Controller
     {
         return Statistic::getPopularDrugs($limit);
     }
-
 }

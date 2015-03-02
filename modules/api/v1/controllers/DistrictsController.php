@@ -1,18 +1,19 @@
 <?php
 
-namespace app\controllers\api\v1;
+namespace app\modules\api\v1\controllers;
 
 use app\models\Pharmacie;
+use app\modules\api\v1\components\ActiveController;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\rest\Action;
 
-class CitiesController extends AbstractRestController
+class DistrictsController extends ActiveController
 {
     /**
      * @inheritdoc
      */
-    public $modelClass = 'app\models\City';
+    public $modelClass = 'app\models\District';
 
     /**
      * @inheritdoc
@@ -26,7 +27,6 @@ class CitiesController extends AbstractRestController
         return $actions;
     }
 
-
     /**
      * @param Action $action
      *
@@ -39,20 +39,19 @@ class CitiesController extends AbstractRestController
 
         $query = $modelClass::find();
 
-        if($region_id = Yii::$app->request->get('region_id')) {
-            $query->where('`map_cities`.`region_id` = :region_id', [':region_id' => $region_id]);
+        if((int)$cityId = Yii::$app->request->get('cityId')) {
+            $query->where('city_id = :city_id', [':city_id' => $cityId]);
         }
 
         if($first_letters = Yii::$app->request->get('first_letters')) {
             $query->andFilterWhere(['like', 'name', $first_letters . '%', false]);
         }
 
-        $query->join('INNER JOIN', Pharmacie::tableName(), "`map_cities`.`id` = `pharmacies`.`city_id`")
-            ->groupBy('`pharmacies`.`city_id`');
+        $query->join('INNER JOIN', Pharmacie::tableName(), "`map_districts`.`id` = `pharmacies`.`district_id`")
+            ->groupBy('`pharmacies`.`district_id`');
 
         return new ActiveDataProvider([
             'query' => $query,
         ]);
     }
-
 }
