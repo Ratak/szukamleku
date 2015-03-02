@@ -6,27 +6,10 @@ use app\models\search\PharmacieSearch;
 use Yii;
 use app\models\Drug;
 use app\models\search\DrugSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
-/**
- * DrugsController implements the CRUD actions for Drug model.
- */
-class DrugsController extends Controller
+class DrugsController extends IndexController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all Drug models.
      * @return mixed

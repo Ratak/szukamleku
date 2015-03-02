@@ -6,27 +6,10 @@ use app\models\Profile;
 use Yii;
 use app\models\User;
 use app\models\search\UserSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
-/**
- * UsersController implements the CRUD actions for User model.
- */
-class UsersController extends Controller
+class UsersController extends IndexController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all User models.
      * @return mixed

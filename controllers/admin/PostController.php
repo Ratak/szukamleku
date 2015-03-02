@@ -3,13 +3,13 @@
 namespace app\controllers\admin;
 
 use Yii;
-use yii\web\Controller;
 use app\models\form\PostForm;
 use app\models\search\PostsSearch;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
-class PostController extends Controller {
+class PostController extends IndexController
+{
 
     public function actionIndex()
     {

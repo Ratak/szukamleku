@@ -3,12 +3,13 @@
 namespace app\controllers\admin;
 
 use Yii;
-use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use app\models\Banners;
 use app\models\search\BannersSearch;
 
-class BannersController extends Controller {
+class BannersController extends IndexController
+{
 
     public function actionIndex()
     {

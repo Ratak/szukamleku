@@ -3,12 +3,12 @@
 namespace app\controllers\admin;
 
 use Yii;
-use yii\web\Controller;
 use app\models\Links;
 use app\models\search\LinksSearch;
 use yii\web\NotFoundHttpException;
 
-class LinksController extends Controller {
+class LinksController extends IndexController
+{
 
     public function actionIndex()
     {

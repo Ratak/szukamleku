@@ -5,27 +5,10 @@ namespace app\controllers\admin;
 use Yii;
 use app\models\Pharmacie;
 use app\models\search\PharmacieSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
-/**
- * PharmaciesController implements the CRUD actions for Pharmacie model.
- */
-class PharmaciesController extends Controller
+class PharmaciesController extends IndexController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all Pharmacie models.
      * @return mixed

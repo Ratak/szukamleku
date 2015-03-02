@@ -3,11 +3,12 @@
 namespace app\controllers\admin;
 
 use Yii;
-use yii\web\Controller;
 use app\models\Newsletters;
 use app\models\search\NewslettersSearch;
+use yii\web\NotFoundHttpException;
 
-class NewslettersController extends Controller {
+class NewslettersController extends IndexController
+{
 
     public function actionIndex()
     {
@@ -28,8 +29,8 @@ class NewslettersController extends Controller {
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
-                    'model' => $model,
-                ]);
+                'model' => $model,
+            ]);
         }
     }
 
@@ -42,7 +43,6 @@ class NewslettersController extends Controller {
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'users' => $users
             ]);
         }
     }
