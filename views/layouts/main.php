@@ -43,41 +43,24 @@ AppAsset::register($this);
             echo NavX::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
-                        ['label' => 'Home', 'url' => ['/site/index']],
-                        ['label' => 'Posts', 'url' => ['/site/posts']],
-                        ['label' => 'About', 'url' => ['/site/about']],
-                        ['label' => 'Contact', 'url' => ['/site/contact']],
+                    ['label' => 'Home',    'url' => ['/site/index']],
+                    ['label' => 'Posts',   'url' => ['/site/posts']],
+                    ['label' => 'About',   'url' => ['/site/about']],
+                    ['label' => 'Contact', 'url' => ['/site/contact']],
 
-                        ['label' => 'User', 'items' => [
-                            ['label' => 'Signup', 'url' => ['/auth/signup']],
-                            ['label' => 'recover', 'url' => ['/auth/recover']],
-                            ['label' => 'recover-confirmation', 'url' => ['/auth/recover-confirmation']],
-                        ]],
+                    ['label' => 'User', 'items' => [
+                        ['label' => 'Signup',       'url' => ['/auth/signup']],
+                        ['label' => 'recover',      'url' => ['/auth/recover']],
+                        ['label' => 'confirmation', 'url' => ['/auth/recover-confirmation']],
+                    ]],
 
-                        Yii::$app->user->isGuest
-                            ? ['label' => 'Login', 'url' => ['/auth/login']]
-                            : [
-                            'label' => 'Logout (' . Yii::$app->user->identity->email . ')',
-                            'url' => ['/auth/logout'],
-                            'linkOptions' => ['data-method' => 'post']
-                        ],
+                    ['label' => 'Admin', 'url' => ['/admin'], 'visible' => Yii::$app->user->can('admin')],
 
-                        ['label' => 'Admin', 'items' => [
-                            ['label' => 'Drugs',      'url' => ['/admin/drugs']],
-                            ['label' => 'Pharmacies', 'url' => ['/admin/pharmacies']],
-                            ['label' => 'Users',      'url' => ['/admin/users']],
-                            ['label' => 'Map', 'items' => [
-                                ['label' => 'Regions',   'url' => ['/admin/map/regions']],
-                                ['label' => 'Cities',    'url' => ['/admin/map/cities']],
-                                ['label' => 'Districts', 'url' => ['/admin/map/districts']],
-                            ]],
-                            ['label' => 'Posts', 'url' => ['/admin/post']],
-                            ['label' => 'Links', 'url' => ['/admin/links']],
-                            ['label' => 'Newsletter', 'url' => ['/admin/newsletters']],
-                            ['label' => 'Banners', 'url' => ['/admin/banners']],
-                        ],
+                    Yii::$app->user->isGuest
+                        ? ['label' => 'Login',  'url' => ['/auth/login']]
+                        : ['label' => 'Logout', 'url' => ['/auth/logout'], 'linkOptions' => ['data-method' => 'post']
                     ],
-                ]
+                ],
             ]);
             NavBar::end();
         ?>
@@ -91,7 +74,7 @@ AppAsset::register($this);
             ]) ?>
             <?= $content ?>
             <hr/>
-            <?= LinksWidget::widget()?>
+            <?php /*= LinksWidget::widget()*/ ?>
         </div>
     </div>
 
