@@ -35,12 +35,12 @@ class ImportController extends Controller
                 'manufacturer'  => ArrayHelper::getValue($item, 2),
                 'price'         => ArrayHelper::getValue($item, 3),
                 'quantity'      => ArrayHelper::getValue($item, 4),
-                'date'          => ArrayHelper::getValue($item, 5),
+                'sync_at'       => ArrayHelper::getValue($item, 5),
             ]);
 
-            $data->validate();
+//            $data->validate();
 
-//            $data->save();
+            $data->save();
         }
 
         return 'ok';
