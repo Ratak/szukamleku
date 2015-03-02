@@ -7,7 +7,9 @@
 
 namespace app\components;
 
+use app\models\Language;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * @inheritdoc
@@ -28,5 +30,18 @@ class User extends \yii\web\User
         }
 
         return Yii::$app->getUrlManager()->createUrl($url === null ? Yii::$app->getHomeUrl() : $url) ;
+    }
+
+    public function setReturnUrl($url)
+    {
+        $languages = ArrayHelper::getColumn(Language::getAllArray(), 'url');
+        $parts = explode('/', $url);
+
+        if(in_array($parts[1], $languages)){
+            unset($parts[1]);
+            $url = implode('/', $parts);
+        }
+
+        parent::setReturnUrl($url);
     }
 }
