@@ -16,7 +16,7 @@ class Yii extends \yii\BaseYii
  * @property \app\components\LanguageRequest     $request
  * @property \app\components\Settings            $settings
  * @property \app\components\User                $user
- * @property \letyii\rbaccached\RbacCached       $authManager
+ * @property \yii\rbac\PhpManager                $authManager
  * @property \yii\caching\FileCache              $cache
  * @property \yii\swiftmailer\Mailer             $mailer
  */
