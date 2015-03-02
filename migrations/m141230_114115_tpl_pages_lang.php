@@ -1,7 +1,5 @@
 <?php
 
-use app\models\User;
-use app\models\Language;
 use yii\db\Schema;
 use yii\db\Migration;
 

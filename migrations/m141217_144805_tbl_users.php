@@ -9,16 +9,24 @@ class m141217_144805_tbl_users extends Migration
     public function up()
     {
         $this->createTable(User::tableName(), [
-            'id'            => Schema::TYPE_PK,
-            'status_id'     => Schema::TYPE_SMALLINT . '(1) DEFAULT ' . User::STATUS_INACTIVE,
-            'role_id'       => Schema::TYPE_SMALLINT . '(2) DEFAULT ' . User::ROLE_USER,
-            'language'      => Schema::TYPE_STRING   . '(2)',
-            'email'         => Schema::TYPE_STRING   . '(100)',
-            'company'       => Schema::TYPE_STRING,
-            'password_hash' => Schema::TYPE_STRING,
-            'auth_key'      => Schema::TYPE_STRING   . '(32)',
-            'created_at'    => Schema::TYPE_INTEGER  . '(11) UNSIGNED',
-            'updated_at'    => Schema::TYPE_INTEGER  . '(11) UNSIGNED',
+            'id'             => Schema::TYPE_PK,
+            'status_id'      => Schema::TYPE_SMALLINT . '(1) DEFAULT ' . User::STATUS_INACTIVE,
+            'role_id'        => Schema::TYPE_SMALLINT . '(2) DEFAULT ' . User::ROLE_MANAGER,
+            'language'       => Schema::TYPE_STRING . '(2)',
+            'email'          => Schema::TYPE_STRING . '(100)',
+            'company'        => Schema::TYPE_STRING,
+            'password_hash'  => Schema::TYPE_STRING,
+            'auth_key'       => Schema::TYPE_STRING . '(32)',
+            'access_token'   => Schema::TYPE_STRING . '(32)',
+            'first_name'     => Schema::TYPE_STRING . '(32)',
+            'last_name'      => Schema::TYPE_STRING . '(32)',
+            'phone'          => Schema::TYPE_STRING . '(15)',
+            'fax'            => Schema::TYPE_STRING . '(15)',
+            'legal_address'  => Schema::TYPE_STRING,
+            'postal_address' => Schema::TYPE_STRING,
+            'krs'            => Schema::TYPE_STRING . '(32)',
+            'created_at'     => Schema::TYPE_INTEGER . '(11) UNSIGNED',
+            'updated_at'     => Schema::TYPE_INTEGER . '(11) UNSIGNED',
         ], 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB');
 
         $this->createIndex('email',     User::tableName(), 'email', true);
