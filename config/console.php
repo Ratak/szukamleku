@@ -20,10 +20,11 @@ return [
     ],
     'components' => [
         'authManager' => [
-            'class' => 'letyii\rbaccached\RbacCached',
+            'class' => 'yii\rbac\PhpManager',
+            'defaultRoles' => ['guest', 'manager', 'admin'],
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => 'yii\caching\XCache',
         ],
         'log' => [
             'targets' => [
