@@ -17,7 +17,7 @@ class LanguageWidget extends Widget
     public function run() {
         return $this->render('widget', [
             'current' => Language::getCurrent(),
-            'langs'   => Language::getAll(true),
+            'langs'   => Language::getAllArray(true),
         ]);
     }
 }

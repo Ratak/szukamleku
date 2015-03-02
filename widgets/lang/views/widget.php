@@ -13,7 +13,7 @@ use kartik\nav\NavX;
 
 $items = [];
 foreach($langs as $lang) {
-    $items[] = ['label' => $lang->name, 'url' => '/' . $lang->url . Yii::$app->request->getLanguageUrl()];
+    $items[] = ['label' => $lang['name'], 'url' => '/' . $lang['url'] . Yii::$app->request->getLanguageUrl()];
 }
 ?>
 
