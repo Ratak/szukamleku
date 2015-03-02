@@ -13,7 +13,10 @@ $config = [
     'basePath' => dirname(__DIR__),
     'timeZone' => 'Europe/Kiev',
     'language' => 'ru',
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'app\components\ModuleBootstrap',
+    ],
     'components' => [
         'settings' => [
             'class' => 'app\components\Settings'
@@ -24,20 +27,12 @@ $config = [
             'showScriptName'  => false,
             'rules' => [
                 '<alias:signup|login|logout|recover|recover-confirmation>' => 'auth/<alias>',
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => [
-                        'api/v1/regions',
-                        'api/v1/cities',
-                        'api/v1/districts',
-                        'api/v1/drugs',
-                        'api/v1/pharmacies',
-                    ],
-                ],
+                'admin' => 'admin/index',
             ],
         ],
         'authManager' => [
-            'class' => 'letyii\rbaccached\RbacCached',
+            'class' => 'yii\rbac\PhpManager',
+            'defaultRoles' => ['guest', 'manager', 'admin'],
         ],
         'assetManager' => [
             'linkAssets' => true,
@@ -47,12 +42,13 @@ $config = [
             'cookieValidationKey' => 'jwXfKCBGgnoSpFuZllNaPI3WnkNmr0Cv',
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => 'yii\caching\XCache',
         ],
         'user' => [
             'class' => 'app\components\User',
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'loginUrl' => ['auth/login']
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -83,14 +79,8 @@ $config = [
         'db' => require(__DIR__ . '/db.php'),
     ],
     'modules' => [
-        'gridview' =>  [
-            'class' => '\kartik\grid\Module'
-            // enter optional module parameters below - only if you need to
-            // use your own export download action or custom translation
-            // message source
-            // 'downloadAction' => 'gridview/export/download',
-            // 'i18n' => []
-        ]
+        'api'      => 'app\modules\api\Module',
+        'gridview' => '\kartik\grid\Module',
     ],
     'params' => $params,
 ];
