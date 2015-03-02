@@ -1,8 +1,8 @@
 <?php
 /**
- * @link http://www.astwellsoft.com/
+ * @link      http://www.astwellsoft.com/
  * @copyright Copyright (c) 2014 Astwellsoft
- * @license http://www.astwellsoft.com/license/
+ * @license   http://www.astwellsoft.com/license/
  */
 
 namespace app\models\form;
@@ -31,6 +31,12 @@ class SignupForm extends Model
     public $krs;
     public $acept_legal;
 
+
+    /**
+     * @var User
+     */
+    protected $user;
+
     /** @inheritdoc */
     public function init()
     {
@@ -38,60 +44,6 @@ class SignupForm extends Model
 
         Event::on(User::className(), User::EVENT_AFTER_INSERT, [$this, 'send']);
     }
-
-    /**
-     * @return array the validation rules.
-     */
-//    public function rules()
-//    {
-//        return [
-//            ['email', 'filter', 'filter' => 'trim'],
-//            ['email', 'required'],
-//            ['email', 'string', 'max' => 100],
-//            ['email', 'email'],
-//            ['email', 'unique', 'targetClass' => User::className(), 'message' => Yii::t('auth', 'EMAIL_HAS_ALREADY_BEEN_TAKEN')],
-//
-//            ['password', 'required'],
-//            ['password', 'string', 'min' => 6, 'max' => 30],
-//
-//            ['repassword', 'required'],
-//            ['repassword', 'string', 'min' => 6, 'max' => 30],
-//            ['repassword', 'compare', 'compareAttribute' => 'password', 'skipOnEmpty' => false],
-//
-//            ['company', 'filter', 'filter' => 'trim'],
-//            ['company', 'required'],
-//            ['company', 'string', 'max' => 255],
-//
-//            ['first_name', 'filter', 'filter' => 'trim'],
-//            ['first_name', 'required'],
-//            ['first_name', 'string', 'max' => 255],
-//
-//            ['last_name', 'filter', 'filter' => 'trim'],
-//            ['last_name', 'required'],
-//            ['last_name', 'string', 'max' => 255],
-//
-//            ['phone', 'filter', 'filter' => 'trim'],
-//            ['phone', 'string', 'max' => 255],
-//
-//            ['fax', 'filter', 'filter' => 'trim'],
-//            ['fax', 'string', 'max' => 255],
-//
-//            ['legal_address', 'filter', 'filter' => 'trim'],
-//            ['legal_address', 'required'],
-//            ['legal_address', 'string', 'max' => 255],
-//
-//            ['postal_address', 'filter', 'filter' => 'trim'],
-//            ['postal_address', 'required'],
-//            ['postal_address', 'string', 'max' => 255],
-//
-//            ['krs', 'filter', 'filter' => 'trim'],
-//            ['krs', 'required'],
-//            ['krs', 'string', 'max' => 255],
-//
-//            ['acept_legal', 'required'],
-//            ['acept_legal', 'required', 'requiredValue' => '1', 'message' => Yii::t('auth', 'NOT_ACEPT_LEGAL') ],
-//        ];
-//    }
 
     /** @inheritdoc */
     public function attributeLabels()
@@ -125,34 +77,36 @@ class SignupForm extends Model
      */
     public function signup()
     {
-//        if(!$this->validate()) {
-//            return false;
-//        }
-
         $attr = Yii::$app->request->post();
 
-        $user    = new User(['scenario' => 'signup']);
+        $this->user = new User(['scenario' => 'signup']);
         $profile = new Profile(['scenario' => 'signup']);
 
-        $user->setAttributes($attr);
+        $this->user->setAttributes($attr);
         $profile->setAttributes($attr);
 
-        $userValid = $user->validate();
-        $profileValid = $profile->validate();
+        if ($this->user->validate() && $profile->validate()) {
+            $this->user->setProfile($profile);
 
-        if($userValid && $profileValid) {
-            $user->setProfile($profile);
+            $this->user->generateAuthKey();
+            $this->user->generateAccessToken();
 
-            if($user->save(false)) {
+            if ($this->user->save(false)) {
                 Yii::info('User has been registered');
+
                 return true;
             }
         }
 
-        $this->addErrors($user->getErrors());
+        $this->addErrors($this->user->getErrors());
         $this->addErrors($profile->getErrors());
 
         return false;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -163,8 +117,8 @@ class SignupForm extends Model
     public function send()
     {
         return Yii::$app->mailer
-            ->compose('signup', ['model' => $this])
-            ->setTo($this->email)
+            ->compose('signup', ['model' => $this->user])
+            ->setTo($this->user->email)
             ->setSubject(Yii::t('auth', 'EMAIL_SUBJECT_SIGNUP'))
             ->send();
     }

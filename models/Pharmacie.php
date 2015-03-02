@@ -126,12 +126,6 @@ class Pharmacie extends ActiveRecord
             'region',
             'city',
             'district',
-            'drugs',
         ];
-    }
-
-    public static function findByCode($code)
-    {
-        return self::findOne(['code = :code', [':code' => $code]]);
     }
 }

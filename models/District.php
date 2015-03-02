@@ -69,7 +69,6 @@ class District extends ActiveRecord
     {
         return [
             'city',
-            'pharmacies',
         ];
     }
 }

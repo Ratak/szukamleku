@@ -132,7 +132,9 @@ class Statistic extends ActiveRecord
 
     public static function getPopularDrugs($limit)
     {
-        $return = Yii::$app->cache->get(self::CACHE_POPULAR_DRUGS_KEY);
+        $key = self::CACHE_POPULAR_DRUGS_KEY . $limit;
+
+        $return = Yii::$app->cache->get($key);
 
         if ($return === false) {
             $totalQuery = self::getModalQuery(Drug::className());
@@ -143,7 +145,7 @@ class Statistic extends ActiveRecord
                 'total' => Drug::find()->where(['id' => $totalQuery])->limit($limit)->all(),
             ];
 
-            Yii::$app->cache->set(self::CACHE_POPULAR_DRUGS_KEY, $return, self::CACHE_POPULAR_DRUGS_DURATION);
+            Yii::$app->cache->set($key, $return, self::CACHE_POPULAR_DRUGS_DURATION);
         }
 
         return $return;

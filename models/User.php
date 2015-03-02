@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -17,6 +16,14 @@ use yii\web\IdentityInterface;
  * @property string      $company
  * @property string      $password_hash
  * @property string      $auth_key
+ * @property string      $access_token
+ * @property string      $first_name
+ * @property string      $last_name
+ * @property string      $phone
+ * @property string      $fax
+ * @property string      $legal_address
+ * @property string      $postal_address
+ * @property string      $krs
  * @property integer     $created_at
  * @property integer     $updated_at
  *
@@ -37,7 +44,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_BANNED = 2;
 
     /** Роль Менеджер */
-    const ROLE_USER = 0;
+    const ROLE_MANAGER = 0;
 
     /** Роль Админ */
     const ROLE_ADMIN = 1;
@@ -45,10 +52,10 @@ class User extends ActiveRecord implements IdentityInterface
     /** @var string Пароль в чистом виду. Используется для валидации */
     public $password;
 
-    /**  @var string Читабельный статус пользователя. */
+    /** @var string Читабельный статус пользователя. */
     private $_status;
 
-    /**  @var string Читабельная роль пользователя. */
+    /** @var string Читабельная роль пользователя. */
     private $_roles;
 
     // *******************************************************************
@@ -67,25 +74,62 @@ class User extends ActiveRecord implements IdentityInterface
 
             // Роль [[role_id]]
             ['role_id', 'in',      'range' => array_keys( self::getRoleArray() )],
-            ['role_id', 'default', 'value' => self::ROLE_USER],
-
-            ['company', 'required', 'on' => ['signup']],
-            ['company', 'string'],
+            ['role_id', 'default', 'value' => self::ROLE_MANAGER],
 
             // Язык [[language]]
             ['language', 'exist',   'targetClass' => Language::className(), 'targetAttribute' => 'url'],
             ['language', 'default', 'value' => Language::getDefaultLang()->url],
 
             // E-mail [[email]]
-            ['email', 'required', 'on' => ['signup', 'create', 'update']],
             ['email', 'trim'],
+            ['email', 'required', 'on' => ['signup', 'create', 'update']],
             ['email', 'string', 'max' => 100],
             ['email', 'email'],
             ['email', 'unique'],
 
+            // Название компании
+            ['company', 'trim'],
+            ['company', 'required', 'on' => ['signup']],
+            ['company', 'string'],
+
             // Пароль [[password]]
             ['password', 'required', 'on' => ['signup', 'create']],
             ['password', 'string', 'min' => 6, 'max' => 30],
+
+            // Имя
+            ['first_name', 'trim'],
+            ['first_name', 'required', 'on' => ['signup', 'create', 'update']],
+            ['first_name', 'string', 'max' => 32],
+
+            // Фамилия
+            ['last_name', 'trim'],
+            ['last_name', 'required', 'on' => ['signup', 'create', 'update']],
+            ['last_name', 'string', 'max' => 32],
+
+            // Номер телефона
+            ['phone', 'trim'],
+            ['phone', 'required', 'on' => ['signup', 'create', 'update']],
+            ['phone', 'string', 'max' => 15],
+
+            // Номер факса
+            ['fax', 'trim'],
+            ['fax', 'required', 'on' => ['signup', 'create', 'update']],
+            ['fax', 'string', 'max' => 15],
+
+            // Юридический адресс
+            ['legal_address', 'trim'],
+            ['legal_address', 'required', 'on' => ['signup', 'create', 'update']],
+            ['legal_address', 'string'],
+
+            // Почтовый адресс
+            ['postal_address', 'trim'],
+            ['postal_address', 'required', 'on' => ['signup', 'create', 'update']],
+            ['postal_address', 'string'],
+
+            // Номер в базе KRS
+            ['krs', 'trim'],
+            ['krs', 'required', 'on' => ['signup', 'create', 'update']],
+            ['krs', 'string'],
         ];
     }
 
@@ -94,12 +138,29 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function scenarios()
     {
-        return [
-            'recover' => ['password'],
-            'signup'  => ['status_id', 'role_id', 'language', 'email', 'company', 'password', 'language'],
-            'create'  => ['status_id', 'role_id', 'language', 'email', 'company', 'password', 'language'],
-            'update'  => ['status_id', 'role_id', 'language' ,'email', 'company', 'password', 'language'],
+        $createUpdate = [
+            'status_id',
+            'role_id',
+            'language',
+            'email',
+            'company',
+            'password',
+            'first_name',
+            'last_name',
+            'phone',
+            'fax',
+            'legal_address',
+            'postal_address',
+            'krs',
         ];
+
+        $scenarios = parent::scenarios();
+        $scenarios['password'] = ['password'];
+        $scenarios['signup'] = $createUpdate;
+        $scenarios['create'] = $createUpdate;
+        $scenarios['update'] = $createUpdate;
+
+        return $scenarios;
     }
 
     /**
@@ -107,7 +168,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->getAttribute('auth_key') == $authKey;
+        return $this->getAuthKey() === $authKey;
     }
 
     /**
@@ -201,7 +262,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getId()
     {
-        return $this->getAttribute('id');
+        return $this->getPrimaryKey();
     }
 
     /**
@@ -209,7 +270,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->getAttribute('auth_key');
+        return $this->auth_key;
     }
 
     /**
@@ -261,18 +322,19 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getRole()
     {
-//        $return = '';
-//        $roles = Yii::$app->authManager->getRolesByUser( $this->getId() );
-//
-//        foreach( $roles as $role) {
-//            $return .= $role->name . " \n";
-//        }
-//
-//        return $return;
-
         return ($this->_roles === null)
             ? $this->_roles = self::getRoleArray()[$this->role_id]
             : $this->_roles;
+    }
+
+    /**
+     * Полное имя пользователя
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -283,7 +345,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function getRoleArray()
     {
         return [
-            self::ROLE_USER  => Yii::t('user', 'USER'),
+            self::ROLE_MANAGER  => Yii::t('user', 'USER'),
             self::ROLE_ADMIN => Yii::t('user', 'ADMIN'),
         ];
     }
@@ -311,7 +373,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne($id);
+        return static::findOne(['id' => $id, 'status_id' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -319,7 +381,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['access_token' => $token, 'status_id' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -331,9 +393,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByEmail($email)
     {
-        return static::find()
-            ->where('email = :email', [':email' => $email])
-            ->one();
+        return static::findOne(['email' => $email, 'status_id' => self::STATUS_ACTIVE]);
     }
 
     // *******************************************************************
@@ -388,11 +448,16 @@ class User extends ActiveRecord implements IdentityInterface
         unset(
             $fields['password_hash'],
             $fields['auth_key'],
+            $fields['access_token'],
             $fields['status_id'],
             $fields['role_id']
         );
 
-        return array_combine($fields, $fields);
+        $fields['full_name'] = function (self $model) {
+            return $model->getFullName();
+        };
+
+        return $fields;
     }
 
     // *******************************************************************
@@ -404,5 +469,15 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password = Yii::$app->security->generateRandomKey(8);
 
         return $this;
+    }
+
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    public function generateAccessToken()
+    {
+        $this->access_token = Yii::$app->security->generateRandomString();
     }
 }

@@ -79,16 +79,4 @@ class Region extends ActiveRecord
 
         return $return;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function extraFields()
-    {
-        return [
-            'cities',
-            'pharmacies',
-        ];
-    }
-
 }

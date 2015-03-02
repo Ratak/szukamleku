@@ -81,8 +81,6 @@ class City extends ActiveRecord
     {
         return [
             'region',
-            'districts',
-            'pharmacies',
         ];
     }
 

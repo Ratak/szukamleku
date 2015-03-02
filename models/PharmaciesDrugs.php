@@ -21,9 +21,6 @@ class PharmaciesDrugs extends ActiveRecord
     public $pharmacieCode;
     public $drugName;
     public $manufacturer;
-    public $price;
-    public $quantity;
-    public $date;
 
     /* var Pharmacie $importPharmacie */
     protected $importPharmacie;
@@ -70,6 +67,10 @@ class PharmaciesDrugs extends ActiveRecord
             ['pharmacie_id', 'required'],
             ['pharmacie_id', 'integer'],
 
+            // manufacturer
+            ['manufacturer', 'trim'],
+            ['manufacturer', 'required', 'on' => [self::SCENARIO_IMPORT]],
+
             // drugName
             ['drugName', 'trim'],
             ['drugName', 'required',         'on' => [self::SCENARIO_IMPORT]],
@@ -80,20 +81,19 @@ class PharmaciesDrugs extends ActiveRecord
             ['drug_id', 'required'],
             ['drug_id', 'integer'],
 
-            // manufacturer
-            ['manufacturer', 'trim'],
-
             // price
             ['price', 'trim'],
             ['price', 'required', 'on' => [self::SCENARIO_IMPORT]],
+            ['price', 'number',   'on' => [self::SCENARIO_IMPORT]],
 
             // quantity
             ['quantity', 'trim'],
             ['quantity', 'required', 'on' => [self::SCENARIO_IMPORT]],
+            ['quantity', 'number',   'on' => [self::SCENARIO_IMPORT]],
 
-            // date
-            ['date', 'trim'],
-            ['date', 'required', 'on' => [self::SCENARIO_IMPORT]],
+            // sync_at
+            ['sync_at', 'trim'],
+            ['sync_at', 'required', 'on' => [self::SCENARIO_IMPORT]],
         ];
     }
 
@@ -142,7 +142,10 @@ class PharmaciesDrugs extends ActiveRecord
     public function getDrugByName()
     {
         if(!$this->importDrug) {
-            $this->importDrug = Pharmacie::findByCode($this->drugName);
+            $this->importDrug = Drug::findOne([
+                'name'         => $this->drugName,
+                'manufacturer' => $this->manufacturer
+            ]);
         }
 
         return $this->importDrug;
@@ -150,7 +153,9 @@ class PharmaciesDrugs extends ActiveRecord
 
     public function getPharmacieByCode() {
         if(!$this->importPharmacie) {
-            $this->importPharmacie = Pharmacie::findByCode($this->pharmacieCode);
+            $this->importPharmacie = Pharmacie::findOne([
+                'code' => $this->pharmacieCode
+            ]);
         }
 
         return $this->importPharmacie;

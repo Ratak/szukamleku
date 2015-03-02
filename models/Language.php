@@ -19,21 +19,23 @@ use yii\db\ActiveRecord;
  */
 class Language extends ActiveRecord
 {
-    const CACHE_KEY_ALL_LANGUAGES = 'cache_key_all_languages';
+    const CACHE_KEY_ALL_LANGUAGES        = 'cache_key_all_languages';
+    const CACHE_KEY_ALL_LANGUAGES_BY_URL = 'cache_key_all_languages_by_url';
     const CACHE_KEY_ALL_LANGUAGES_EXCEPT = 'cache_key_all_languages_except';
+    const CACHE_KEY_DEFAULT_LANGUAGE     = 'cache_key_default_language';
     const CACHE_DURATION = 60;
 
     /* @var Language Переменная, для хранения текущего объекта языка */
     static $current = null;
 
-    public static function getAll($exceptCurrent = false)
+    public static function getAllArray($exceptCurrent = false)
     {
         $curent = Language::getCurrent()->id;
-        $cache = $exceptCurrent
+        $cacheKey = $exceptCurrent
             ? self::CACHE_KEY_ALL_LANGUAGES_EXCEPT . $curent
             : self::CACHE_KEY_ALL_LANGUAGES;
 
-        $return = Yii::$app->cache->get($cache);
+        $return = Yii::$app->cache->get($cacheKey);
 
         if ($return === false) {
             $return = Language::find();
@@ -42,9 +44,9 @@ class Language extends ActiveRecord
                 $return->where('id != :current_id', [':current_id' => $curent]);
             }
 
-            $return = $return->all();
+            $return = $return->asArray()->all();
 
-            Yii::$app->cache->set($cache, $return, $cache);
+            Yii::$app->cache->set($cacheKey, $return);
         }
 
         return $return;
@@ -83,7 +85,15 @@ class Language extends ActiveRecord
      */
     public static function getDefaultLang()
     {
-        return Language::find()->where('`default` = :default', [':default' => 1])->one();
+        $return = Yii::$app->cache->get(self::CACHE_KEY_DEFAULT_LANGUAGE);
+
+        if ($return === false) {
+            $return = Language::find()->where('`default` = :default', [':default' => 1])->one();
+
+            Yii::$app->cache->set(self::CACHE_KEY_DEFAULT_LANGUAGE, $return);
+        }
+
+        return $return;
     }
 
     /**
@@ -99,13 +109,20 @@ class Language extends ActiveRecord
             return null;
         }
 
-        $language = Language::find()->where('url = :url', [':url' => $url])->one();
-        return ( $language === null )
-            ? null
-            : $language;
+        $cacheKey = self::CACHE_KEY_ALL_LANGUAGES_BY_URL . $url;
+
+        $return = Yii::$app->cache->get($cacheKey);
+
+        if ($return === false) {
+            $return = Language::find()->where(['url' => $url])->one();
+
+            if($return === null) return null;
+
+            Yii::$app->cache->set($cacheKey, $return);
+        }
+
+        return $return;
     }
-
-
 
     /**
      * @inheritdoc
@@ -146,5 +163,22 @@ class Language extends ActiveRecord
             'name'    => Yii::t('app', 'Name'),
             'default' => Yii::t('app', 'Default'),
         ];
+    }
+
+    public function afterInsert()
+    {
+        self::flushCache();
+    }
+
+    public function afterUpdate()
+    {
+        self::flushCache();
+    }
+
+    protected static function flushCache()
+    {
+        Yii::$app->cache->delete(self::CACHE_KEY_ALL_LANGUAGES);
+        Yii::$app->cache->delete(self::CACHE_KEY_ALL_LANGUAGES_BY_URL);
+        Yii::$app->cache->delete(self::CACHE_KEY_ALL_LANGUAGES_EXCEPT);
     }
 }

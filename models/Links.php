@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use app\models\Language;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 

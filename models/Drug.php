@@ -173,9 +173,9 @@ class Drug extends ActiveRecord
 
     public static function getFirstLetters()
     {
-//        $data = Yii::$app->cache->get(self::CACHE_KEY_FIRST_LETTERS);
+        $data = Yii::$app->cache->get(self::CACHE_KEY_FIRST_LETTERS);
 
-//        if ($data === false) {
+        if ($data === false) {
             $data = (new Query())
                 ->select(['DISTINCT LEFT(name, 1) as l'])
                 ->from(self::tableName())
@@ -183,11 +183,8 @@ class Drug extends ActiveRecord
 
             $data = ArrayHelper::getColumn($data, 'l');
 
-//        uksort($data, 'strcasecmp');
-//        natsort($data);
-//
-//            Yii::$app->cache->set(self::CACHE_KEY_FIRST_LETTERS, $data);
-//        }
+            Yii::$app->cache->set(self::CACHE_KEY_FIRST_LETTERS, $data);
+        }
 
         return $data;
     }
@@ -232,15 +229,5 @@ class Drug extends ActiveRecord
         $fields['status'] = 'status';
 
         return $fields;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function extraFields()
-    {
-        return [
-            'pharmacies',
-        ];
     }
 }
