@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-use mihaildev\ckeditor\CKEditor;
 use app\models\User;
 
 $this->title = Yii::t('app', 'Send Newsletter');
@@ -23,8 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <?= HTML::listBox('users_list',
-                ArrayHelper::map(User::find()->where(['role_id' => User::ROLE_USER, 'status_id' => User::STATUS_ACTIVE])->all(),'id', 'id'),
-                ArrayHelper::map(User::find()->where(['role_id' => User::ROLE_USER, 'status_id' => User::STATUS_ACTIVE])->all(),'id', 'email'),
+                ArrayHelper::map(User::find()->where(['role_id' => User::ROLE_MANAGER, 'status_id' => User::STATUS_ACTIVE])->all(),'id', 'id'),
+                ArrayHelper::map(User::find()->where(['role_id' => User::ROLE_MANAGER, 'status_id' => User::STATUS_ACTIVE])->all(),'id', 'email'),
                 [
                     'class' => 'form-control',
                     'multiple' => true
