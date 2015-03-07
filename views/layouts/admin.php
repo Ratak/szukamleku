@@ -50,12 +50,14 @@ use yii\widgets\Breadcrumbs;
             ]],
             ['label' => 'Posts',      'url' => ['/admin/post']],
             ['label' => 'Links',      'url' => ['/admin/links']],
+            ['label' => 'Menu',      'url' => ['/admin/menu']],
             ['label' => 'Newsletter', 'url' => ['/admin/newsletters']],
             ['label' => 'Banners',    'url' => ['/admin/banners']],
             ['label' => 'Logout',     'url' => ['/auth/logout'], 'linkOptions' => ['data-method' => 'post']]
         ]
     ]);
     NavBar::end();
+
     ?>
 
     <div class="container">

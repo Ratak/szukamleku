@@ -6,6 +6,7 @@
  */
 
 use app\widgets\links\LinksWidget;
+use app\models\Menu;
 use app\widgets\lang\LanguageWidget;
 use kartik\nav\NavX;
 use yii\helpers\Html;
@@ -40,28 +41,10 @@ AppAsset::register($this);
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
-            echo NavX::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => [
-                    ['label' => 'Home',    'url' => ['/site/index']],
-                    ['label' => 'Posts',   'url' => ['/site/posts']],
-                    ['label' => 'About',   'url' => ['/site/about']],
-                    ['label' => 'Contact', 'url' => ['/site/contact']],
 
-                    ['label' => 'User', 'items' => [
-                        ['label' => 'Signup',       'url' => ['/auth/signup']],
-                        ['label' => 'recover',      'url' => ['/auth/recover']],
-                        ['label' => 'confirmation', 'url' => ['/auth/recover-confirmation']],
-                    ]],
+            $menu = Menu::getTree();
 
-                    ['label' => 'Admin', 'url' => ['/admin'], 'visible' => Yii::$app->user->can('admin')],
-
-                    Yii::$app->user->isGuest
-                        ? ['label' => 'Login',  'url' => ['/auth/login']]
-                        : ['label' => 'Logout', 'url' => ['/auth/logout'], 'linkOptions' => ['data-method' => 'post']
-                    ],
-                ],
-            ]);
+            echo NavX::widget($menu);
             NavBar::end();
         ?>
 
